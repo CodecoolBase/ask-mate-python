@@ -1,9 +1,12 @@
 import connection
 from datetime import datetime
 
+ANSWER_PATH = 'sample_data/answer.csv'
+QUESTION_PATH = 'sample_data/question.csv'
 
-def sort_file():
-    questions = connection.read_file('sample_data/question.csv')
+
+def sort_file(file_name=QUESTION_PATH):
+    questions = connection.read_file(file_name)
     questions.sort(key=lambda line: line['submission_time'], reverse=True)
     return questions
 
