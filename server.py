@@ -16,6 +16,22 @@ def add_new_answer():
     return render_template('answer.html', title="Add New Answer!")
 
 
+@app.route('/question/<question_id>')
+def route_question_id(question_id):
+    stored_questions = data_manager.format_file()
+    return render_template('questiondetails.html', questions=stored_questions, id=question_id)
+
+
+@app.route('/question/<question_id>/new-answer')
+def route_new_answer():
+    return render_template('new-answer.html')
+
+
+@app.route("/add-question")
+def new_question():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
