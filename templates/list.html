@@ -1,47 +1,35 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'layout.html' %}
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
+{% block content %}
+    <h1 class="mt-4 text-xl-center" style="font-family: Monoton, Tahoma, sans-serif;">Ask Mate</h1>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <title>Ask Mate</title>
-</head>
-<body>
-    <h1>Ask Mate</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Submission time</th>
-                <th>View number</th>
-                <th>Vote number</th>
-                <th>Title</th>
-                <th>Message</th>
-                <th>Image</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for question in questions %}
-            <tr>
-                <td>{{ question['id'] }}</td>
-                <td>{{ question['submission_time'] }}</td>
-                <td>{{ question['view_number'] }}</td>
-                <td>{{ question['vote_number'] }}</td>
-                <td>{{ question['title'] }}</td>
-                <td>{{ question['message'] }}h</td>
-                <td>{{ question['image'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-</body>
-</html>
+    <div class="table-responsive mt-4 mb-4">
+        <table class="table table-bordered table-hover table-ligth">
+            <thead class="bg-secondary text-white">
+                <tr class="active">
+                    <th>Id</th>
+                    <th>Submission time</th>
+                    <th>View number</th>
+                    <th>Vote number</th>
+                    <th>Title</th>
+                    <th>Message</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody class="bg-light shadow p-3 mb-5 bg-white rounded">
+                {% for question in questions %}
+                <tr>
+                    <td>{{ question['id'] }}</td>
+                    <td>{{ question['submission_time'] }}</td>
+                    <td>{{ question['view_number'] }}</td>
+                    <td>{{ question['vote_number'] }}</td>
+                    <td>{{ question['title'] }}</td>
+                    <td>{{ question['message'] }}h</td>
+                    <td>{{ question['image'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        
+{% endblock %}

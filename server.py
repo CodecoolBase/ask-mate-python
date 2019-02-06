@@ -15,6 +15,11 @@ def route_question_id():
 
     return render_template('questiondetails.html')
 
+@app.route("/add-question")
+def new_question():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
