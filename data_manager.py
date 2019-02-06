@@ -8,7 +8,7 @@ def sort_file():
     return questions
 
 
-def formatted_file():
+def format_file():
     sorted_questions = sort_file()
     datas = []
     for question in sorted_questions:

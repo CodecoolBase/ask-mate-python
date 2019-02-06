@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def route_list():
-    stored_questions = data_manager.formatted_file()
+    stored_questions = data_manager.format_file()
     return render_template('list.html', questions=stored_questions)
 
 
