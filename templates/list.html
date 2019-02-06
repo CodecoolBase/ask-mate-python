@@ -1,12 +1,47 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
     <title>Ask Mate</title>
 </head>
 <body>
     <h1>Ask Mate</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Submission time</th>
+                <th>View number</th>
+                <th>Vote number</th>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question['id'] }}</td>
+                <td>{{ question['submission_time'] }}</td>
+                <td>{{ question['view_number'] }}</td>
+                <td>{{ question['vote_number'] }}</td>
+                <td>{{ question['title'] }}</td>
+                <td>{{ question['message'] }}h</td>
+                <td>{{ question['image'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
 </html>
