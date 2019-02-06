@@ -11,6 +11,11 @@ def route_list():
     return render_template('list.html', questions=stored_questions)
 
 
+@app.route("/add-question")
+def new_question():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,

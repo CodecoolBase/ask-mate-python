@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>New Question | Ask Mate</title>
+</head>
+<body>
+    <h1>Adding a new question</h1>
+
+    <form action="/question/<question_id>">
+
+    <label for="question-title">Question Title(Required):</label>
+    <input id="question-title" name="QuestionTitle" required><br>
+
+    <label for="question">Question (Required):</label><br>
+    <textarea id="question" name="NewQuestion" rows="6" cols="40" required></textarea><br>
+
+    <button type="submit">Add new question</button>
+    </form>
+</body>
+</html>
