@@ -22,5 +22,5 @@ def format_file():
 
 
 def generate_new_id(filename):
-    new_id = len(connection.read_file(filename)) + 1
+    new_id = len(connection.read_file(filename))
     return new_id

@@ -44,7 +44,7 @@ def add_question():
         }
         fieldnames = ['id', 'submission', 'view_number', 'vote_number', 'title', 'message', 'image']
         connection.write_to_file('sample_data/question.csv', user_story, fieldnames)
-        return redirect("url_for(route_question_id,  question_id=user_story['id'])")
+        return redirect(url_for('route_question_id',  question_id=user_story['id']))
 
     return render_template("newquestion.html")
 
