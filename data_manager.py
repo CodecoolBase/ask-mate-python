@@ -29,7 +29,10 @@ def format_file(file_path):
             answer['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
             datas.append(answer)
         return datas
-    
+
+
+def get_questions():
+    return format_file('sample_data/question.csv')
 
 
 def generate_new_id(filename):
