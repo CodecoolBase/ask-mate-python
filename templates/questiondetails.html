@@ -32,10 +32,11 @@
             </tbody>
         </table>
         <br>
+        <h2 class="mt-4 text-xl-center" style="font-family: Monoton, Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Answers</h2>
         <table class="table table-bordered table-hover table-ligth">
             <tbody class="bg-light shadow p-3 mb-5 bg-white rounded">
                 {% for answer in answers %}
-                    {% if id == question['question_id'] %}
+                    {% if id == answer['question_id'] %}
                         <tr>
                             <td>{{ answer['submission_time'] }}</td>
                             <td>{{ answer['message'] }}</td>
@@ -45,6 +46,6 @@
             </tbody>
         </table>
         <br>
-        <a href="/question/<question_id>/new-answer" class="btn btn-primary">Post a new answer</a>
+        <a href="/question/{{ id }}/new-answer" class="btn btn-primary">Post a new answer</a>
     </div>
 {% endblock %}

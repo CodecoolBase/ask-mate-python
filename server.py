@@ -10,24 +10,33 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def route_list():
-    stored_questions = data_manager.format_file()
+    stored_questions = data_manager.format_file('sample_data/question.csv')
     return render_template('list.html', questions=stored_questions, title="Welcome!")
-
-
-@app.route('/new-answer', methods=['GET', 'POST'])
-def add_new_answer():
-    return render_template('answer.html', title="Add New Answer!")
 
 
 @app.route('/question/<question_id>')
 def route_question_id(question_id):
-    stored_questions = data_manager.format_file()
-    return render_template('questiondetails.html', questions=stored_questions, id=question_id)
+    stored_questions = data_manager.format_file('sample_data/question.csv')
+    stored_answers = data_manager.format_file('sample_data/answer.csv')
+    return render_template('questiondetails.html', questions=stored_questions, answers=stored_answers, id=question_id)
 
 
-@app.route('/question/<question_id>/new-answer')
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id):
-    return render_template('answer.html')
+    if request.method == "POST":
+        user_story = {
+            'id': data_manager.generate_new_id('sample_data/answer.csv'),
+            'submission': int(time.time()),
+            'vote_number': 0,
+            'question_id': question_id,
+            'message': request.form["answer"],
+            'image': ""
+        }
+        fieldnames = ['id', 'submission', 'vote_number', 'question_id', 'message', 'image']
+        connection.write_to_file('sample_data/answer.csv', user_story, fieldnames)
+        return redirect(url_for('route_question_id', question_id=question_id))
+    
+    return render_template('answer.html', title="Add New Answer!", question_id=question_id)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -38,8 +47,8 @@ def add_question():
             'submission': int(time.time()),
             'view_number': 0,
             'vote_number': 0,
-            'title': request.form["QuestionTitle"],
-            'message': request.form["NewQuestion"],
+            'title': request.form["question-title"],
+            'message': request.form["new-question"],
             'image': ""
         }
         fieldnames = ['id', 'submission', 'view_number', 'vote_number', 'title', 'message', 'image']
