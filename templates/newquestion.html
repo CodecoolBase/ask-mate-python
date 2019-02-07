@@ -9,9 +9,9 @@
 <body>
     <h1>Adding a new question</h1>
 
-    <form action="/question/<question_id>">
+    <form action="{{ url_for('add_question') }}" method="post">
 
-    <label for="question-title">Question Title(Required):</label>
+    <label for="question-title">Question Title (Required):</label><br>
     <input id="question-title" name="QuestionTitle" required><br>
 
     <label for="question">Question (Required):</label><br>

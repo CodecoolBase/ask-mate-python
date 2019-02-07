@@ -26,11 +26,37 @@
                         <td>{{ question['vote_number'] }}</td>
                         <td>{{ question['title'] }}</td>
                         <td>{{ question['message'] }}</td>
-                        <td>{{ question['image'] }}</td>
                     </tr>
                 {% endif %}
             {% endfor %}
             </tbody>
         </table>
+        <br>
+        <table class="table table-bordered table-hover table-ligth">
+            <thead class="bg-secondary text-white">
+                <tr class="active">
+                    <th>Id</th>
+                    <th>Submission time</th>
+                    <th>Vote number</th>
+                    <th>question_id</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody class="bg-light shadow p-3 mb-5 bg-white rounded">
+                {% for answer in answers %}
+                    {% if id == question['question_id'] %}
+                        <tr>
+                            <td>{{ answer['id'] }}</td>
+                            <td>{{ answer['submission_time'] }}</td>
+                            <td>{{ answer['vote_number'] }}</td>
+                            <td>{{ answer['question_id'] }}</td>
+                            <td>{{ answer['message'] }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/question/<question_id>/new-answer">Post a new answer</a>
     </div>
 {% endblock %}

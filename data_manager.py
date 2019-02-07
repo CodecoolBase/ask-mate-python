@@ -19,3 +19,8 @@ def format_file():
         question['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         datas.append(question)
     return datas
+
+
+def generate_new_id(filename):
+    new_id = len(connection.read_file(filename)) + 1
+    return new_id
