@@ -32,7 +32,7 @@ def format_file(file_path):
 
 
 def get_questions():
-    return format_file('sample_data/question.csv')
+    return format_file(QUESTION_PATH)
 
 
 def generate_new_id(filename):
