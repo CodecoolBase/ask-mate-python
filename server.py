@@ -23,8 +23,8 @@ def route_question_id(question_id):
 
 
 @app.route('/question/<question_id>/new-answer')
-def route_new_answer():
-    return render_template('new-answer.html')
+def route_new_answer(question_id):
+    return render_template('answer.html')
 
 
 @app.route("/add-question")

@@ -1,31 +1,29 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1 class="mt-4 text-xl-center" style="font-family: Monoton, Tahoma, sans-serif;">Ask Mate</h1>
+    <h1 class="mt-4 text-xl-center" style="font-family: Monoton, Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Ask Mate</h1>
+
+    <div class="float-right mb-4">
+        <a href="/add-question" class="btn btn-primary">Add New Question</a>
+    </div>
 
     <div class="table-responsive mt-4 mb-4">
         <table class="table table-bordered table-hover table-ligth">
             <thead class="bg-secondary text-white">
                 <tr class="active">
-                    <th>Id</th>
                     <th>Submission time</th>
+                    <th>Title</th>
                     <th>View number</th>
                     <th>Vote number</th>
-                    <th>Title</th>
-                    <th>Message</th>
-                    <th>Image</th>
                 </tr>
             </thead>
             <tbody class="bg-light shadow p-3 mb-5 bg-white rounded">
                 {% for question in questions %}
                 <tr>
-                    <td>{{ question['id'] }}</td>
                     <td>{{ question['submission_time'] }}</td>
+                    <td><a href="/question/{{ question['id'] }}">{{ question['title'] }}</a></td>
                     <td>{{ question['view_number'] }}</td>
                     <td>{{ question['vote_number'] }}</td>
-                    <td><a href="/question/{{ question['id'] }}">{{ question['title'] }}</a></td>
-                    <td>{{ question['message'] }}</td>
-                    <td>{{ question['image'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

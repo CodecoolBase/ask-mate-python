@@ -5,9 +5,9 @@ ANSWER_PATH = 'sample_data/answer.csv'
 QUESTION_PATH = 'sample_data/question.csv'
 
 
-def sort_file(file_name=QUESTION_PATH):
+def sort_file(file_name=QUESTION_PATH, dict_key='submission_time'):
     questions = connection.read_file(file_name)
-    questions.sort(key=lambda line: line['submission_time'], reverse=True)
+    questions.sort(key=lambda line: line[dict_key], reverse=True)
     return questions
 
 
