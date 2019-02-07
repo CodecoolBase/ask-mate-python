@@ -17,10 +17,6 @@ def route_question_id(question_id):
     return render_template('questiondetails.html', questions=stored_questions, id=question_id)
 
 
-@app.route('/question/<question_id>/new-answer')
-def route_new_answer():
-    return render_template('new-answer.html')
-
 
 @app.route("/add-question")
 def new_question():

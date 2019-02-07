@@ -7,25 +7,19 @@
         <table class="table table-bordered table-hover table-ligth">
             <thead class="bg-secondary text-white">
                 <tr class="active">
-                    <th>Id</th>
                     <th>Submission time</th>
                     <th>View number</th>
                     <th>Vote number</th>
                     <th>Title</th>
-                    <th>Message</th>
-                    <th>Image</th>
                 </tr>
             </thead>
             <tbody class="bg-light shadow p-3 mb-5 bg-white rounded">
                 {% for question in questions %}
                 <tr>
-                    <td>{{ question['id'] }}</td>
                     <td>{{ question['submission_time'] }}</td>
+                    <td><a href="/question/{{ question['id'] }}">{{ question['title'] }}</a></td>
                     <td>{{ question['view_number'] }}</td>
                     <td>{{ question['vote_number'] }}</td>
-                    <td><a href="/question/{{ question['id'] }}">{{ question['title'] }}</a></td>
-                    <td>{{ question['message'] }}</td>
-                    <td>{{ question['image'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
