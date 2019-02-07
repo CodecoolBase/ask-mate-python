@@ -10,7 +10,7 @@ def read_file(filename):
         return datas
 
 
-def write_to_file(filename, user_story):
+def write_to_file(filename, user_story, fieldnames):
     with open(filename, 'a', encoding='utf-8') as csvfile:
-        datas_to_export = csv.DictWriter(csvfile)
+        datas_to_export = csv.DictWriter(csvfile, fieldnames=fieldnames)
         datas_to_export.writerow(user_story)
