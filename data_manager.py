@@ -18,7 +18,7 @@ def format_file(file_path):
         datas = []
         for question in sorted_questions:
             ts = int(question['submission_time'])
-            question['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+            question['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
             datas.append(question)
         return datas
     elif file_path == ANSWER_PATH:
@@ -26,7 +26,7 @@ def format_file(file_path):
         datas = []
         for answer in sorted_answers:
             ts = int(answer['submission_time'])
-            answer['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+            answer['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
             datas.append(answer)
         return datas
 
