@@ -12,23 +12,13 @@ def sort_file(file_name=QUESTION_PATH, dict_key='submission_time'):
 
 
 def format_file(file_path):
-    if file_path ==  QUESTION_PATH:
-        sorted_questions = sort_file()
-        
-        datas = []
-        for question in sorted_questions:
-            ts = int(question['submission_time'])
-            question['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            datas.append(question)
-        return datas
-    elif file_path == ANSWER_PATH:
-        sorted_answers = sort_file(file_name=ANSWER_PATH)
-        datas = []
-        for answer in sorted_answers:
-            ts = int(answer['submission_time'])
-            answer['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            datas.append(answer)
-        return datas
+    sorted_datas = sort_file(file_name=file_path)
+    datas = []
+    for data in sorted_datas:
+        ts = int(data['submission_time'])
+        data['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        datas.append(data)
+    return datas   
 
 
 def get_questions():
