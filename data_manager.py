@@ -2,61 +2,54 @@ import connection
 from datetime import datetime
 import time
 
-ANSWER_PATH = 'sample_data/answer.csv'
-QUESTION_PATH = 'sample_data/question.csv'
 
-
-def sort_file(file_name=QUESTION_PATH, dict_key='submission_time'):
-    questions = connection.read_file(file_name)
-    questions.sort(key=lambda line: line[dict_key], reverse=True)
+@connection.connection_handler
+def get_questions(cursor):
+    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC;""")
+    questions = cursor.fetchall()
     return questions
 
 
-def format_file(file_path):
-    sorted_datas = sort_file(file_name=file_path)
-    datas = []
-    for data in sorted_datas:
-        ts = int(data['submission_time'])
-        data['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-        datas.append(data)
-    return datas
+@connection.connection_handler
+def get_answers(cursor):
+    cursor.execute("""SELECT * FROM answer ORDER BY submission_time DESC;""")
+    answers = cursor.fetchall()
+    return answers
 
 
-def get_questions():
-    return format_file(QUESTION_PATH)
-
-
-def get_answers():
-    return format_file(ANSWER_PATH)
-
-
-def add_question(title, message):
+@connection.connection_handler
+def add_question(cursor, title, message):
     user_story = {
-        'id': generate_new_id(QUESTION_PATH),
-        'submission': int(time.time()),
+        'submission_time': datetime.now(),
         'view_number': 0,
         'vote_number': 0,
         'title': title,
         'message': message,
         'image': ""
     }
-    fieldnames = ['id', 'submission', 'view_number', 'vote_number', 'title', 'message', 'image']
-    connection.write_to_file(QUESTION_PATH, user_story, fieldnames)
-    return user_story
 
+    cursor.execute("""INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
+                      VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);""",
+                   user_story)
 
-def add_answer(question_id, message):
+    cursor.execute("""SELECT id FROM question
+                      ORDER BY id DESC
+                      LIMIT 1;""")
+    return cursor.fetchone()['id']
+
+@connection.connection_handler
+def add_answer(cursor, question_id, message):
+
     user_story = {
-        'id': generate_new_id(ANSWER_PATH),
-        'submission': int(time.time()),
+        'submission_time': datetime.now(),
         'vote_number': 0,
         'question_id': question_id,
         'message': message,
         'image': ""
     }
-    fieldnames = ['id', 'submission', 'vote_number', 'question_id', 'message', 'image']
-    connection.write_to_file(ANSWER_PATH, user_story, fieldnames)
-    return user_story
+
+    cursor.execute("""INSERT INTO answer(submission_time, vote_number, question_id, message, image)
+                      VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""", user_story)
 
 
 def generate_new_id(filename):
