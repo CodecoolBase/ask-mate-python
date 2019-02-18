@@ -1,5 +1,6 @@
 import connection
 from datetime import datetime
+import time
 
 ANSWER_PATH = 'sample_data/answer.csv'
 QUESTION_PATH = 'sample_data/question.csv'
