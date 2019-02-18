@@ -18,11 +18,15 @@ def format_file(file_path):
         ts = int(data['submission_time'])
         data['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         datas.append(data)
-    return datas   
+    return datas
 
 
 def get_questions():
     return format_file(QUESTION_PATH)
+
+
+def get_answers():
+    return format_file(ANSWER_PATH)
 
 
 def generate_new_id(filename):

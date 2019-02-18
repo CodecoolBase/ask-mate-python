@@ -16,8 +16,8 @@ def route_list():
 
 @app.route('/question/<question_id>')
 def route_question_id(question_id):
-    stored_questions = data_manager.format_file('sample_data/question.csv')
-    stored_answers = data_manager.format_file('sample_data/answer.csv')
+    stored_questions = data_manager.get_questions()
+    stored_answers = data_manager.get_answers()
     return render_template('questiondetails.html', questions=stored_questions, answers=stored_answers, id=question_id)
 
 
