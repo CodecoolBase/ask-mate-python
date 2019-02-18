@@ -33,17 +33,7 @@ def route_new_answer(question_id):
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question():
     if request.method == "POST":
-        user_story = {
-            'id': data_manager.generate_new_id('sample_data/question.csv'),
-            'submission': int(time.time()),
-            'view_number': 0,
-            'vote_number': 0,
-            'title': request.form["question-title"],
-            'message': request.form["new-question"],
-            'image': ""
-        }
-        fieldnames = ['id', 'submission', 'view_number', 'vote_number', 'title', 'message', 'image']
-        connection.write_to_file('sample_data/question.csv', user_story, fieldnames)
+        user_story = data_manager.add_question(request.form["question-title"], request.form["new-question"])
         return redirect(url_for('route_question_id',  question_id=user_story['id']))
 
     return render_template("newquestion.html")
