@@ -17,7 +17,7 @@ def format_file(file_path):
     datas = []
     for data in sorted_datas:
         ts = int(data['submission_time'])
-        data['submission_time'] = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        data['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         datas.append(data)
     return datas
 
