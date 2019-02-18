@@ -29,6 +29,21 @@ def get_answers():
     return format_file(ANSWER_PATH)
 
 
+def add_question(title, message):
+    user_story = {
+        'id': generate_new_id(QUESTION_PATH),
+        'submission': int(time.time()),
+        'view_number': 0,
+        'vote_number': 0,
+        'title': title,
+        'message': message,
+        'image': ""
+    }
+    fieldnames = ['id', 'submission', 'view_number', 'vote_number', 'title', 'message', 'image']
+    connection.write_to_file(QUESTION_PATH, user_story, fieldnames)
+    return user_story
+
+
 def generate_new_id(filename):
     new_id = len(connection.read_file(filename))
     return new_id
