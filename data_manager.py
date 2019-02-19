@@ -1,6 +1,5 @@
 import connection
 from datetime import datetime
-import time
 
 
 @connection.connection_handler
@@ -52,6 +51,3 @@ def add_answer(cursor, question_id, message):
                       VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""", user_story)
 
 
-def generate_new_id(filename):
-    new_id = len(connection.read_file(filename))
-    return new_id
