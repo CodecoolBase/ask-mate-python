@@ -68,6 +68,7 @@ def search_in_answer_table(cursor, searched_word):
     return searched_data
 
 
+@connection.connection_handler
 def vote_up_question(cursor, question_id):
 
     variables = {

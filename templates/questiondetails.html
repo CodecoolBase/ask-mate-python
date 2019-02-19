@@ -35,6 +35,14 @@
                             <div><a href="" class="badge badge-secondary">python</a></div>
                             <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
                         </td>
+                        <td>
+                            <form action="{{ url_for('vote_up_question', question_id=id) }}" method="post">
+                                <button type="submit" class="btn btn-primary mb-2">Vote up</button>
+                            </form>
+                            <form action="{{ url_for('vote_down_question', question_id=id) }}" method="post">
+                                <button type="submit" class="btn btn-primary mb-2">Vote down</button>
+                            </form>
+                        </td>
                     </tr>
 
                 </tbody>

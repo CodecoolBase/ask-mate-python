@@ -43,14 +43,14 @@ def search():
 
 
 @app.route("/question/<int:question_id>/vote-up", methods=['GET', 'POST'])
-def vote_up(question_id):
+def vote_up_question(question_id):
     if request.method == 'POST':
         data_manager.vote_up_question(question_id)
         return redirect(url_for('route_question_id', question_id=question_id))
 
 
 @app.route("/question/<int:question_id>/vote-down", methods=['GET', 'POST'])
-def vote_down(question_id):
+def vote_down_question(question_id):
     if request.method == 'POST':
         data_manager.vote_down_question(question_id)
         return redirect(url_for('route_question_id', question_id=question_id))
