@@ -36,9 +36,24 @@ def add_question():
 
     return render_template("newquestion.html")
 
+
 @app.route("/searched", methods=["GET", "POST"])
 def search():
     pass
+
+
+@app.route("/question/<int:question_id>/vote-up", methods=['GET', 'POST'])
+def vote_up(question_id):
+    if request.method == 'POST':
+        data_manager.vote_up_question(question_id)
+        return redirect(url_for('route_question_id', question_id=question_id))
+
+
+@app.route("/question/<int:question_id>/vote-down", methods=['GET', 'POST'])
+def vote_down(question_id):
+    if request.method == 'POST':
+        data_manager.vote_down_question(question_id)
+        return redirect(url_for('route_question_id', question_id=question_id))
 
 
 if __name__ == "__main__":
