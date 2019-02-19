@@ -1,5 +1,6 @@
 import connection
 from datetime import datetime
+import time
 
 ANSWER_PATH = 'sample_data/answer.csv'
 QUESTION_PATH = 'sample_data/question.csv'
@@ -12,27 +13,50 @@ def sort_file(file_name=QUESTION_PATH, dict_key='submission_time'):
 
 
 def format_file(file_path):
-    if file_path ==  QUESTION_PATH:
-        sorted_questions = sort_file()
-        
-        datas = []
-        for question in sorted_questions:
-            ts = int(question['submission_time'])
-            question['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            datas.append(question)
-        return datas
-    elif file_path == ANSWER_PATH:
-        sorted_answers = sort_file(file_name=ANSWER_PATH)
-        datas = []
-        for answer in sorted_answers:
-            ts = int(answer['submission_time'])
-            answer['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            datas.append(answer)
-        return datas
+    sorted_datas = sort_file(file_name=file_path)
+    datas = []
+    for data in sorted_datas:
+        ts = int(data['submission_time'])
+        data['submission_time'] = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        datas.append(data)
+    return datas
 
 
 def get_questions():
     return format_file(QUESTION_PATH)
+
+
+def get_answers():
+    return format_file(ANSWER_PATH)
+
+
+def add_question(title, message):
+    user_story = {
+        'id': generate_new_id(QUESTION_PATH),
+        'submission': int(time.time()),
+        'view_number': 0,
+        'vote_number': 0,
+        'title': title,
+        'message': message,
+        'image': ""
+    }
+    fieldnames = ['id', 'submission', 'view_number', 'vote_number', 'title', 'message', 'image']
+    connection.write_to_file(QUESTION_PATH, user_story, fieldnames)
+    return user_story
+
+
+def add_answer(question_id, message):
+    user_story = {
+        'id': generate_new_id(ANSWER_PATH),
+        'submission': int(time.time()),
+        'vote_number': 0,
+        'question_id': question_id,
+        'message': message,
+        'image': ""
+    }
+    fieldnames = ['id', 'submission', 'vote_number', 'question_id', 'message', 'image']
+    connection.write_to_file(ANSWER_PATH, user_story, fieldnames)
+    return user_story
 
 
 def generate_new_id(filename):
