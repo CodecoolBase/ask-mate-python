@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    {% include 'navbar.html' %}
+
     <h1 class="mt-4 text-xl-center" style="font-family: Monoton, Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Post a new answer</h1>
 
     <form action="{{ url_for('route_new_answer', question_id=question_id) }}" method="post">
