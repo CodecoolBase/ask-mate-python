@@ -36,6 +36,16 @@ def add_question():
 
     return render_template("newquestion.html")
 
+#this is Ivan's first task
+#Add comment to answer:
+@app.route('/answer/<int:answer_id>/new-comment', methods=['GET', 'POST'])
+def route_new_comment(answer_id):
+    if request.method == "POST":
+        data_manager.add_comment(question_id, request.form["answer"])
+        return redirect(url_for('route_question_id', question_id=question_id))
+
+    return render_template('comment.html', title="Add New Comment!", question_id=question_id)
+
 
 if __name__ == "__main__":
     app.run(

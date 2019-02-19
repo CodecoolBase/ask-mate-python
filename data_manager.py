@@ -1,6 +1,6 @@
 import connection
 from datetime import datetime
-import time
+
 
 
 @connection.connection_handler
@@ -51,7 +51,18 @@ def add_answer(cursor, question_id, message):
     cursor.execute("""INSERT INTO answer(submission_time, vote_number, question_id, message, image)
                       VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""", user_story)
 
+#this is Ivan's first task
+#add comment to answer:
+@connection.connection_handler
+def add_comment(cursor, question_id, message):
 
-def generate_new_id(filename):
-    new_id = len(connection.read_file(filename))
-    return new_id
+    user_story = {
+        'submission_time': datetime.now(),
+        'question_id': question_id,
+        'message': message,
+    }
+
+    cursor.execute("""INSERT INTO comment(submission_time, question_id, message)
+                      VALUES(%(submission_time)s,%(question_id)s, %(message)s;""", user_story)
+
+

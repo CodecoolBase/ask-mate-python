@@ -39,7 +39,8 @@
                     {% if id == answer['question_id'] %}
                         <tr>
                             <td>{{ answer['submission_time'] }}</td>
-                            <td>{{ answer['message'] }}</td>
+                            <td>{{ answer['message'] }}<br>
+                                <a href="/question/{{ id }}/new-comment" class="btn btn-primary">Post a new comment</a></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
