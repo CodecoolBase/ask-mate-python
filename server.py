@@ -36,6 +36,10 @@ def add_question():
 
     return render_template("newquestion.html")
 
+@app.route("/searched", methods=["GET", "POST"])
+def search():
+    pass
+
 
 if __name__ == "__main__":
     app.run(

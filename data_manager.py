@@ -36,6 +36,7 @@ def add_question(cursor, title, message):
                       LIMIT 1;""")
     return cursor.fetchone()['id']
 
+
 @connection.connection_handler
 def add_answer(cursor, question_id, message):
 
@@ -51,3 +52,17 @@ def add_answer(cursor, question_id, message):
                       VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""", user_story)
 
 
+@connection.connection_handler
+def search_in_question_table(cursor, searched_word):
+    cursor.execute("""SELECT * FROM question WHERE title LIKE %(searched_word)s OR message LIKE %(searched_word)s;""",
+                   {searched_word: '%' + searched_word + '%'})
+    searched_data = cursor.fetchall()
+    return searched_data
+
+
+@connection.connection_handler
+def search_in_answer_table(cursor, searched_word):
+    cursor.execute("""SELECT * FROM answer WHERE message LIKE %(searched_word)s;""",
+                   {searched_word: '%' + searched_word + '%'})
+    searched_data = cursor.fetchall()
+    return searched_data
