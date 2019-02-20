@@ -53,16 +53,9 @@ def add_answer(cursor, question_id, message):
 
 
 @connection.connection_handler
-def search_in_question_table(cursor, searched_word):
-    cursor.execute("""SELECT * FROM question WHERE title LIKE %(searched_word)s OR message LIKE %(searched_word)s;""",
-                   {searched_word: '%' + searched_word + '%'})
-    searched_data = cursor.fetchall()
-    return searched_data
-
-
-@connection.connection_handler
-def search_in_answer_table(cursor, searched_word):
-    cursor.execute("""SELECT * FROM answer WHERE message LIKE %(searched_word)s;""",
-                   {searched_word: '%' + searched_word + '%'})
+def search_in(cursor, searched_word):
+    cursor.execute("""SELECT question.* FROM question LEFT JOIN answer ON question.id = answer.question_id
+                      WHERE (LOWER(title) LIKE %(searched_word)s OR LOWER(answer.message) LIKE %(searched_word)s OR LOWER(question.message) LIKE %(searched_word)s);""",
+                   {'searched_word': '%' + searched_word + '%'})
     searched_data = cursor.fetchall()
     return searched_data

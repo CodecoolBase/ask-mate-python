@@ -36,9 +36,20 @@ def add_question():
 
     return render_template("newquestion.html")
 
-@app.route("/searched", methods=["GET", "POST"])
+
+@app.route("/search")
 def search():
-    pass
+    searched_word = request.args.get('q').lower()
+    if searched_word is not None:
+        questions = data_manager.search_in(searched_word)
+        updated_questions = []
+        for question in questions:
+            if question not in updated_questions:
+                updated_questions.append(question)
+        print(updated_questions)
+
+        return render_template('search.html', searched_word=searched_word, questions=updated_questions)
+    return redirect(url_for('route_list'))
 
 
 if __name__ == "__main__":
