@@ -36,11 +36,12 @@
                             <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
                         </td>
                         <td>
+                            <div class="badge badge-info">Vote</div>
                             <form action="{{ url_for('vote_up_question', question_id=id) }}" method="post">
-                                <button type="submit" class="btn btn-primary mb-2">Vote up</button>
+                                <button type="submit" class="btn btn-primary mb-2">▲</button>
                             </form>
                             <form action="{{ url_for('vote_down_question', question_id=id) }}" method="post">
-                                <button type="submit" class="btn btn-primary mb-2">Vote down</button>
+                                <button type="submit" class="btn btn-primary mb-2">▼</button>
                             </form>
                         </td>
                     </tr>
@@ -70,11 +71,12 @@
                                 <div class="text-right font-italic" style="font-size: 14px;">{{ answer['submission_time'] }}</div>
                             </td>
                             <td>
+                                <div class="badge badge-info">Vote</div>
                                 <form action="{{ url_for('vote_up_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                    <button type="submit" class="btn btn-primary mb-2">Vote up</button>
+                                    <button type="submit" class="btn btn-primary mb-2">▲</button>
                                 </form>
                                 <form action="{{ url_for('vote_down_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                    <button type="submit" class="btn btn-primary mb-2">Vote down</button>
+                                    <button type="submit" class="btn btn-primary mb-2">▼</button>
                                 </form>
                             </td>
                         </tr>
