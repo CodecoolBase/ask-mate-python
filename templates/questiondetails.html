@@ -6,7 +6,7 @@
     {% for question in questions %}
         {% if id == question['id'] %}
 
-        <h2 class="mt-4 text-xl-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">{{ question['title'] }}</h1>
+        <h2 class="mt-4 text-xl-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">{{ question['title'] }}</h2>
 
         <div class="table-responsive mt-4 mb-4">
             <table class="table table-bordered table-hover table-ligth">
@@ -35,6 +35,15 @@
                             <div><a href="" class="badge badge-secondary">python</a></div>
                             <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
                         </td>
+                        <td>
+                            <div class="badge badge-info">Vote</div>
+                            <form action="{{ url_for('vote_up_question', question_id=id) }}" method="post">
+                                <button type="submit" class="btn btn-primary mb-2">▲</button>
+                            </form>
+                            <form action="{{ url_for('vote_down_question', question_id=id) }}" method="post">
+                                <button type="submit" class="btn btn-primary mb-2">▼</button>
+                            </form>
+                        </td>
                     </tr>
 
                 </tbody>
@@ -49,11 +58,26 @@
                     {% if id == answer['question_id'] %}
                         <tr>
                             <td>
+                                <span>
+                                    <div class="text-sm-left">{{ answer['vote_number'] }}</div>
+                                    <div class="badge badge-info">Votes</div>
+                                </span>
+                            </td>
+                            <td>
                                 <div>
                                     <p>{{ answer['message'] }}</p>
                                 </div>
                                 <div><a href="" class="badge badge-secondary">python</a></div>
                                 <div class="text-right font-italic" style="font-size: 14px;">{{ answer['submission_time'] }}</div>
+                            </td>
+                            <td>
+                                <div class="badge badge-info">Vote</div>
+                                <form action="{{ url_for('vote_up_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                    <button type="submit" class="btn btn-primary mb-2">▲</button>
+                                </form>
+                                <form action="{{ url_for('vote_down_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                    <button type="submit" class="btn btn-primary mb-2">▼</button>
+                                </form>
                             </td>
                         </tr>
                     {% endif %}
