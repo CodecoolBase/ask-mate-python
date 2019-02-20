@@ -53,6 +53,12 @@ def add_answer(cursor, question_id, message):
 
 
 @connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""DELETE FROM answer WHERE id = %(answer_id)s;""",
+                   {'answer_id': answer_id})
+
+
+@connection.connection_handler
 def search_in(cursor, searched_word):
     cursor.execute("""SELECT question.* FROM question LEFT JOIN answer ON question.id = answer.question_id
                       WHERE (LOWER(title) LIKE %(searched_word)s OR LOWER(answer.message) LIKE %(searched_word)s OR LOWER(question.message) LIKE %(searched_word)s);""",

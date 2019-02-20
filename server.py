@@ -52,6 +52,13 @@ def search():
     return redirect(url_for('route_list'))
 
 
+@app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
+def delete_answer(answer_id):
+    if request.method == 'POST':
+        data_manager.delete_answer(answer_id)
+        return redirect(url_for('route_list'))
+
+
 @app.route("/question/<int:question_id>/vote-up", methods=['GET', 'POST'])
 def vote_up_question(question_id):
     if request.method == 'POST':
