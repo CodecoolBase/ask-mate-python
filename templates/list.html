@@ -17,6 +17,13 @@
                 <tr>
                     <td>
                         <div>
+                            <a href="/question/{{ question['id'] }}">{{ question['title'] }}</a>
+                        </div>
+                        <div><a href="" class="badge badge-secondary">python</a></div>
+                        <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
+                    </td>
+                    <td>
+                        <div>
                             <span>
                                 <div class="text-sm-left">{{ question['view_number'] }}</div>
                                 <div class="badge badge-info">Views</div>
@@ -28,13 +35,6 @@
                             <div class="text-sm-left">{{ question['vote_number'] }}</div>
                             <div class="badge badge-info">Votes</div>
                         </span>
-                    </td>
-                    <td>
-                        <div>
-                            <a href="/question/{{ question['id'] }}">{{ question['title'] }}</a>
-                        </div>
-                        <div><a href="" class="badge badge-secondary">python</a></div>
-                        <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
                     </td>
                 </tr>
                 {% endfor %}

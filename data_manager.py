@@ -17,6 +17,13 @@ def get_answers(cursor):
 
 
 @connection.connection_handler
+def get_comments(cursor):
+    cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC""")
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection.connection_handler
 def add_question(cursor, title, message):
     user_story = {
         'submission_time': datetime.now(),
