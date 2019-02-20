@@ -19,7 +19,7 @@ def get_answers(cursor):
 @connection.connection_handler
 def add_question(cursor, title, message):
     user_story = {
-        'submission_time': datetime.now(),
+        'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'view_number': 0,
         'vote_number': 0,
         'title': title,
@@ -41,7 +41,7 @@ def add_question(cursor, title, message):
 def add_answer(cursor, question_id, message):
 
     user_story = {
-        'submission_time': datetime.now(),
+        'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'vote_number': 0,
         'question_id': question_id,
         'message': message,
