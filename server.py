@@ -20,7 +20,8 @@ def route_list():
 def route_question_id(question_id):
     stored_questions = data_manager.get_questions()
     stored_answers = data_manager.get_answers()
-    return render_template('questiondetails.html', questions=stored_questions, answers=stored_answers, id=question_id)
+    stored_comments = data_manager.get_comments()
+    return render_template('questiondetails.html', questions=stored_questions, answers=stored_answers, id=question_id, comments=stored_comments)
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
@@ -37,10 +38,17 @@ def edit_answer(answer_id):
     question_id = data_manager.get_question_id(answer_id)
     if request.method == "POST":
         new_message = request.form['answer']
-        data_manager.get_update(answer_id,new_message)
+        data_manager.get_update(answer_id, new_message)
         return redirect(f'/question/{question_id}')
 
     return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
+
+
+@app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
+def delete_answer(answer_id):
+    if request.method == "POST":
+        data_manager.delete_answer(answer_id)
+        return redirect(url_for('route_list'))
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -50,6 +58,23 @@ def add_question():
         return redirect(url_for('route_question_id',  question_id=user_story_id))
 
     return render_template("newquestion.html")
+
+
+@app.route('/answer/<int:answer_id>/new-comment', methods=['GET', 'POST'])
+def route_new_comment(answer_id):
+    if request.method == "POST":
+        data_manager.add_comment(answer_id, request.form["comment"])
+        return redirect(url_for('route_list'))
+
+    return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id)
+
+
+@app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
+def delete_comment(comment_id):
+    if request.method == "POST":
+        data_manager.delete_comments(comment_id)
+        return redirect(url_for('route_list'))
+
 
 
 @app.route("/search")
@@ -67,11 +92,11 @@ def search():
     return redirect(url_for('route_list'))
 
 
-@app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
-def delete_answer(answer_id):
-    if request.method == 'POST':
-        data_manager.delete_answer(answer_id)
-        return redirect(url_for('route_list'))
+# @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
+# def delete_answer(answer_id):
+#     if request.method == 'POST':
+#         data_manager.delete_answer(answer_id)
+#         return redirect(url_for('route_list'))
 
 
 @app.route("/question/<int:question_id>/vote-up", methods=['GET', 'POST'])

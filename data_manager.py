@@ -24,6 +24,21 @@ def get_answers(cursor):
 
 
 @connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""DELETE FROM comment WHERE answer_id=%(answer_id)s;""", {'answer_id': answer_id})
+    cursor.execute("""DELETE FROM answer WHERE id=%(answer_id)s;""", {'answer_id': answer_id})
+
+
+
+# Ivan's get_comments
+@connection.connection_handler
+def get_comments(cursor):
+    cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC;""")
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection.connection_handler
 def add_question(cursor, title, message):
     user_story = {
         'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -60,12 +75,24 @@ def add_answer(cursor, question_id, message):
 
 
 @connection.connection_handler
-def delete_answer(cursor, answer_id):
-    cursor.execute("""DELETE FROM answer WHERE id = %(answer_id)s;""",
-                   {'answer_id': answer_id})
+def add_comment(cursor, answer_id, message):
+
+    user_story = {
+        'submission_time': datetime.now(),
+        'message': message,
+        'answer_id': answer_id
+    }
+
+    cursor.execute("""INSERT INTO comment(submission_time, answer_id, message)
+                      VALUES(%(submission_time)s,%(answer_id)s, %(message)s);""", user_story)
 
 
-@connection.connection_handler                   
+@connection.connection_handler
+def delete_comments(cursor, comment_id):
+    cursor.execute("""DELETE FROM comment WHERE id=%(comment_id)s;""", {'comment_id': comment_id})
+
+
+@connection.connection_handler
 def get_update(cursor,answer_id , message):
     time = datetime.now()
     cursor.execute("""UPDATE answer SET message = %(message)s,submission_time = %(time)s WHERE id=%(answer_id)s;""",
