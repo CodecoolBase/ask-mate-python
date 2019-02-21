@@ -6,10 +6,14 @@ app = Flask(__name__)
 
 
 @app.route('/')
+def route_main():
+    stored_questions = data_manager.get_latest5_questions()
+    return render_template('list.html', questions=stored_questions, title="Welcome!")\
+
 @app.route('/list')
 def route_list():
     stored_questions = data_manager.get_questions()
-    return render_template('list.html', questions=stored_questions, title="Welcome!")
+    return render_template('list.html', questions=stored_questions, title="Welcome!")\
 
 
 @app.route('/question/<int:question_id>')
@@ -28,8 +32,18 @@ def route_new_answer(question_id):
 
     return render_template('answer.html', title="Add New Answer!", question_id=question_id)
 
+@app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    answers = data_manager.get_answers()
+    question_id = data_manager.get_question_id(answer_id)
+    if request.method == "POST":
+        new_message = request.form['answer']
+        data_manager.get_update(answer_id, new_message)
+        return redirect(f'/question/{question_id}')
 
-#delete answer:
+    return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
+
+
 @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
 def delete_answer(answer_id):
     if request.method == "POST":
@@ -45,8 +59,7 @@ def add_question():
 
     return render_template("newquestion.html")
 
-#this is Ivan's first task
-#Add comment to answer:
+
 @app.route('/answer/<int:answer_id>/new-comment', methods=['GET', 'POST'])
 def route_new_comment(answer_id):
     if request.method == "POST":
@@ -56,7 +69,6 @@ def route_new_comment(answer_id):
     return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id)
 
 
-#delete comment to answer:
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
 def delete_comment(comment_id):
     if request.method == "POST":
@@ -65,9 +77,26 @@ def delete_comment(comment_id):
 
 
 
-@app.route("/searched", methods=["GET", "POST"])
+@app.route("/search")
 def search():
-    pass
+    searched_word = request.args.get('q').lower()
+    if searched_word is not None:
+        questions = data_manager.search_in(searched_word)
+        updated_questions = []
+        for question in questions:
+            if question not in updated_questions:
+                updated_questions.append(question)
+        print(updated_questions)
+
+        return render_template('search.html', searched_word=searched_word, questions=updated_questions)
+    return redirect(url_for('route_list'))
+
+
+@app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
+def delete_answer(answer_id):
+    if request.method == 'POST':
+        data_manager.delete_answer(answer_id)
+        return redirect(url_for('route_list'))
 
 
 @app.route("/question/<int:question_id>/vote-up", methods=['GET', 'POST'])
