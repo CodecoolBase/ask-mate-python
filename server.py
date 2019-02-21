@@ -6,10 +6,14 @@ app = Flask(__name__)
 
 
 @app.route('/')
+def route_main():
+    stored_questions = data_manager.get_latest5_questions()
+    return render_template('list.html', questions=stored_questions, title="Welcome!")\
+
 @app.route('/list')
 def route_list():
     stored_questions = data_manager.get_questions()
-    return render_template('list.html', questions=stored_questions, title="Welcome!")
+    return render_template('list.html', questions=stored_questions, title="Welcome!")\
 
 
 @app.route('/question/<int:question_id>')
@@ -26,6 +30,17 @@ def route_new_answer(question_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
     return render_template('answer.html', title="Add New Answer!", question_id=question_id)
+
+@app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    answers = data_manager.get_answers()
+    question_id = data_manager.get_question_id(answer_id)
+    if request.method == "POST":
+        new_message = request.form['answer']
+        data_manager.get_update(answer_id,new_message)
+        return redirect(f'/question/{question_id}')
+
+    return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
 
 
 @app.route("/add-question", methods=["GET", "POST"])

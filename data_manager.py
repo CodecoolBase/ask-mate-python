@@ -8,6 +8,12 @@ def get_questions(cursor):
     questions = cursor.fetchall()
     return questions
 
+@connection.connection_handler
+def get_latest5_questions(cursor):
+    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;""")
+    questions = cursor.fetchall()
+    return questions
+
 
 @connection.connection_handler
 def get_answers(cursor):
@@ -56,6 +62,23 @@ def add_answer(cursor, question_id, message):
 def delete_answer(cursor, answer_id):
     cursor.execute("""DELETE FROM answer WHERE id = %(answer_id)s;""",
                    {'answer_id': answer_id})
+
+
+@connection.connection_handler                   
+def get_update(cursor,answer_id , message):
+    time = datetime.now()
+    cursor.execute("""UPDATE answer SET message = %(message)s,submission_time = %(time)s WHERE id=%(answer_id)s;""",
+                   {"message":message, 'answer_id':answer_id,'time':time})
+
+
+@connection.connection_handler
+def get_question_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id=%(id)s LIMIT 1
+                   """,
+                   {'id': answer_id})
+    return cursor.fetchone()['question_id']
 
 
 @connection.connection_handler
