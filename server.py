@@ -24,6 +24,13 @@ def route_question_id(question_id):
     return render_template('questiondetails.html', questions=stored_questions, answers=stored_answers, id=question_id, comments=stored_comments)
 
 
+@app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
+def delete_question(question_id):
+    if request.method == "POST":
+        data_manager.delete_question(question_id)
+        return redirect(url_for('route_list'))
+
+
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id):
     if request.method == "POST":
@@ -31,6 +38,7 @@ def route_new_answer(question_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
     return render_template('answer.html', title="Add New Answer!", question_id=question_id)
+
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
 def edit_answer(answer_id):
@@ -91,12 +99,6 @@ def search():
         return render_template('search.html', searched_word=searched_word, questions=updated_questions)
     return redirect(url_for('route_list'))
 
-
-# @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
-# def delete_answer(answer_id):
-#     if request.method == 'POST':
-#         data_manager.delete_answer(answer_id)
-#         return redirect(url_for('route_list'))
 
 
 @app.route("/question/<int:question_id>/vote-up", methods=['GET', 'POST'])

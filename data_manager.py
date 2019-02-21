@@ -9,7 +9,12 @@ def get_questions(cursor):
     return questions
 
 
-
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute("""DELETE FROM question_tag WHERE question_id=%(question_id)s;""", {'question_id': question_id})
+    cursor.execute("""DELETE FROM comment WHERE question_id=%(question_id)s;""", {'question_id': question_id})
+    cursor.execute("""DELETE FROM answer WHERE question_id=%(question_id)s;""", {'question_id': question_id})
+    cursor.execute("""DELETE FROM question WHERE id=%(id)s;""", {'id': question_id})
 
 
 @connection.connection_handler
@@ -33,7 +38,6 @@ def delete_answer(cursor, answer_id):
 
 
 
-# Ivan's get_comments
 @connection.connection_handler
 def get_comments(cursor):
     cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC;""")
