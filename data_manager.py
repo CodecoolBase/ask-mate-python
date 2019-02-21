@@ -10,6 +10,13 @@ def get_questions(cursor):
 
 
 @connection.connection_handler
+def get_latest5_questions(cursor):
+    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;""")
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
 def get_answers(cursor):
     cursor.execute("""SELECT * FROM answer ORDER BY submission_time DESC;""")
     answers = cursor.fetchall()
@@ -17,8 +24,15 @@ def get_answers(cursor):
 
 
 @connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""DELETE FROM comment WHERE answer_id=%(answer_id)s;""", {'answer_id': answer_id})
+    cursor.execute("""DELETE FROM answer WHERE id=%(answer_id)s;""", {'answer_id': answer_id})
+
+
+# Ivan's get_comments
+@connection.connection_handler
 def get_comments(cursor):
-    cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC""")
+    cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC;""")
     comments = cursor.fetchall()
     return comments
 
@@ -26,7 +40,7 @@ def get_comments(cursor):
 @connection.connection_handler
 def add_question(cursor, title, message):
     user_story = {
-        'submission_time': datetime.now(),
+        'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'view_number': 0,
         'vote_number': 0,
         'title': title,
@@ -48,7 +62,7 @@ def add_question(cursor, title, message):
 def add_answer(cursor, question_id, message):
 
     user_story = {
-        'submission_time': datetime.now(),
+        'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'vote_number': 0,
         'question_id': question_id,
         'message': message,
@@ -60,17 +74,45 @@ def add_answer(cursor, question_id, message):
 
 
 @connection.connection_handler
-def search_in_question_table(cursor, searched_word):
-    cursor.execute("""SELECT * FROM question WHERE title LIKE %(searched_word)s OR message LIKE %(searched_word)s;""",
-                   {searched_word: '%' + searched_word + '%'})
-    searched_data = cursor.fetchall()
-    return searched_data
+def add_comment(cursor, answer_id, message):
+
+    user_story = {
+        'submission_time': datetime.now(),
+        'message': message,
+        'answer_id': answer_id
+    }
+
+    cursor.execute("""INSERT INTO comment(submission_time, answer_id, message)
+                      VALUES(%(submission_time)s,%(answer_id)s, %(message)s);""", user_story)
 
 
 @connection.connection_handler
-def search_in_answer_table(cursor, searched_word):
-    cursor.execute("""SELECT * FROM answer WHERE message LIKE %(searched_word)s;""",
-                   {searched_word: '%' + searched_word + '%'})
+def delete_comments(cursor, comment_id):
+    cursor.execute("""DELETE FROM comment WHERE id=%(comment_id)s;""", {'comment_id': comment_id})
+
+
+@connection.connection_handler
+def get_update(cursor,answer_id , message):
+    time = datetime.now()
+    cursor.execute("""UPDATE answer SET message = %(message)s,submission_time = %(time)s WHERE id=%(answer_id)s;""",
+                   {"message":message, 'answer_id':answer_id,'time':time})
+
+
+@connection.connection_handler
+def get_question_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id=%(id)s LIMIT 1
+                   """,
+                   {'id': answer_id})
+    return cursor.fetchone()['question_id']
+
+
+@connection.connection_handler
+def search_in(cursor, searched_word):
+    cursor.execute("""SELECT question.* FROM question LEFT JOIN answer ON question.id = answer.question_id
+                      WHERE (LOWER(title) LIKE %(searched_word)s OR LOWER(answer.message) LIKE %(searched_word)s OR LOWER(question.message) LIKE %(searched_word)s);""",
+                   {'searched_word': '%' + searched_word + '%'})
     searched_data = cursor.fetchall()
     return searched_data
 
