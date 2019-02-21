@@ -4,15 +4,21 @@ import data_manager
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def route_main():
-    stored_questions = data_manager.get_latest5_questions()
+    stored_questions = data_manager.get_questions()
     return render_template('list.html', questions=stored_questions, title="Welcome!")\
 
-@app.route('/list')
+@app.route('/list',methods=['GET'])
 def route_list():
     stored_questions = data_manager.get_questions()
+    if request.method == "GET":
+        order = request.args.get('order_by')
+        direction = request.args.get('direction')
+        if order == None:
+            order = 'submission_time'
+            direction = 'desc'
+        stored_questions = data_manager.get_latest5_questions(order,direction)
     return render_template('list.html', questions=stored_questions, title="Welcome!")\
 
 
