@@ -8,6 +8,7 @@ def get_questions(cursor):
     questions = cursor.fetchall()
     return questions
 
+
 @connection.connection_handler
 def get_latest5_questions(cursor):
     cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;""")
