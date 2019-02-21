@@ -2,7 +2,6 @@ import connection
 from datetime import datetime
 
 
-
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC;""")
@@ -15,6 +14,42 @@ def get_answers(cursor):
     cursor.execute("""SELECT * FROM answer ORDER BY submission_time DESC;""")
     answers = cursor.fetchall()
     return answers
+
+
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""delete FROM answer where id=%(answer_id)s;""", {'answer_id': answer_id})
+
+
+
+# Ivan's get_comments
+@connection.connection_handler
+def get_comments(cursor):
+    cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC;""")
+    comments = cursor.fetchall()
+    return comments
+
+
+
+
+# Ivan's delete_comments
+@connection.connection_handler
+def delete_comments(cursor, comment_id):
+    cursor.execute("""DELETE FROM comment WHERE id=%(comment_id)s;""", {'comment_id': comment_id})
+
+
+
+
+
+
+
+
+# Ivan's get_question_id to catch id for redirecting to questiondetails page
+@connection.connection_handler
+def get_question_id(cursor):
+    cursor.execute("""SELECT question_id FROM answer where """)
+    question_id = cursor.fetchall()
+    return question_id
 
 
 @connection.connection_handler
@@ -37,6 +72,7 @@ def add_question(cursor, title, message):
                       LIMIT 1;""")
     return cursor.fetchone()['id']
 
+
 @connection.connection_handler
 def add_answer(cursor, question_id, message):
 
@@ -51,18 +87,81 @@ def add_answer(cursor, question_id, message):
     cursor.execute("""INSERT INTO answer(submission_time, vote_number, question_id, message, image)
                       VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""", user_story)
 
-#this is Ivan's first task
-#add comment to answer:
+
 @connection.connection_handler
-def add_comment(cursor, question_id, message):
+def add_comment(cursor, answer_id, message):
 
     user_story = {
         'submission_time': datetime.now(),
-        'question_id': question_id,
         'message': message,
+        'answer_id': answer_id
     }
 
-    cursor.execute("""INSERT INTO comment(submission_time, question_id, message)
-                      VALUES(%(submission_time)s,%(question_id)s, %(message)s;""", user_story)
+    cursor.execute("""INSERT INTO comment(submission_time, answer_id, message)
+                      VALUES(%(submission_time)s,%(answer_id)s, %(message)s);""", user_story)
 
 
+@connection.connection_handler
+def search_in_question_table(cursor, searched_word):
+    cursor.execute("""SELECT * FROM question WHERE title LIKE %(searched_word)s OR message LIKE %(searched_word)s;""",
+                   {searched_word: '%' + searched_word + '%'})
+    searched_data = cursor.fetchall()
+    return searched_data
+
+
+@connection.connection_handler
+def search_in_answer_table(cursor, searched_word):
+    cursor.execute("""SELECT * FROM answer WHERE message LIKE %(searched_word)s;""",
+                   {searched_word: '%' + searched_word + '%'})
+    searched_data = cursor.fetchall()
+    return searched_data
+
+
+@connection.connection_handler
+def vote_up_question(cursor, question_id):
+
+    variables = {
+        'question_id': question_id
+    }
+
+    cursor.execute("""UPDATE question
+                      SET vote_number = vote_number+1
+                      WHERE id = %(question_id)s;""", variables)
+
+
+@connection.connection_handler
+def vote_down_question(cursor, question_id):
+
+    variables = {
+        'question_id': question_id
+    }
+
+    cursor.execute("""UPDATE question
+                      SET vote_number = vote_number-1
+                      WHERE id = %(question_id)s;""", variables)
+
+
+@connection.connection_handler
+def vote_up_answer(cursor, question_id, answer_id):
+
+    variables = {
+        'question_id': question_id,
+        'answer_id': answer_id
+    }
+
+    cursor.execute("""UPDATE answer
+                      SET vote_number = vote_number+1
+                      WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
+
+
+@connection.connection_handler
+def vote_down_answer(cursor, question_id, answer_id):
+
+    variables = {
+        'question_id': question_id,
+        'answer_id': answer_id
+    }
+
+    cursor.execute("""UPDATE answer
+                      SET vote_number = vote_number-1
+                      WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
