@@ -74,16 +74,26 @@ def add_answer(cursor, question_id, message):
 
 
 @connection.connection_handler
-def add_comment(cursor, answer_id, message):
+def add_comment(cursor, question_id, answer_id, message):
+    if question_id == '':
+        user_story = {
+            'submission_time': datetime.now(),
+            'message': message,
+            'answer_id': answer_id
+        }
 
-    user_story = {
-        'submission_time': datetime.now(),
-        'message': message,
-        'answer_id': answer_id
-    }
+        cursor.execute("""INSERT INTO comment(submission_time, answer_id, message)
+                          VALUES(%(submission_time)s, %(answer_id)s, %(message)s);""", user_story)
 
-    cursor.execute("""INSERT INTO comment(submission_time, answer_id, message)
-                      VALUES(%(submission_time)s,%(answer_id)s, %(message)s);""", user_story)
+    elif answer_id == '':
+        user_story = {
+            'submission_time': datetime.now(),
+            'message': message,
+            'question_id': question_id
+        }
+
+        cursor.execute("""INSERT INTO comment(submission_time, question_id, message)
+                                  VALUES(%(submission_time)s, %(question_id)s, %(message)s);""", user_story)
 
 
 @connection.connection_handler
@@ -95,7 +105,27 @@ def delete_comments(cursor, comment_id):
 def get_update(cursor,answer_id , message):
     time = datetime.now()
     cursor.execute("""UPDATE answer SET message = %(message)s,submission_time = %(time)s WHERE id=%(answer_id)s;""",
-                   {"message":message, 'answer_id':answer_id,'time':time})
+                   {"message": message, 'answer_id': answer_id, 'time': time})
+
+
+@connection.connection_handler
+def get_update_for_comment(cursor, comment_id, message):
+    time = datetime.now()
+    cursor.execute("""UPDATE comment SET 
+                      message = %(message)s, 
+                      submission_time = %(time)s, 
+                      edited_count = %(count)s 
+                      WHERE id=%(comment_id)s;""", {"message": message, 'comment_id': comment_id, 'time': time, 'count': 1})
+
+
+@connection.connection_handler
+def get_new_update_for_comment(cursor, comment_id, message):
+    time = datetime.now()
+    cursor.execute("""UPDATE comment SET 
+                      message = %(message)s, 
+                      submission_time = %(time)s, 
+                      edited_count = edited_count + 1 
+                      WHERE id=%(comment_id)s;""", {"message": message, 'comment_id': comment_id, 'time': time})
 
 
 @connection.connection_handler
@@ -105,6 +135,16 @@ def get_question_id(cursor, answer_id):
                     WHERE id=%(id)s LIMIT 1
                    """,
                    {'id': answer_id})
+    return cursor.fetchone()['question_id']
+
+
+@connection.connection_handler
+def get_question_id_for_comment(cursor, comment_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE id=%(id)s LIMIT 1
+                   """,
+                   {'id': comment_id})
     return cursor.fetchone()['question_id']
 
 
