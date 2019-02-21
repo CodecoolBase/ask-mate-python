@@ -67,6 +67,7 @@
         {% endfor %}
         <br>
         <h2 class="mt-4 text-xl-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Answers</h2>
+        <div class="text-right" style="margin-bottom: 10px;"><a href="/question/{{ id }}/new-answer" class="btn btn-primary">Post a new answer</a></div>
         <table class="table table-bordered table-hover table-ligth">
             <tbody class="bg-light shadow p-3 mb-5 bg-white rounded">
                 {% for answer in answers %}
@@ -88,19 +89,29 @@
                                         </span>
                                     </div>
                                     <hr>
+                                    <div class="text-right">
+                                        <h4 class="mt-4 text-md-center" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Comments</h4>
+                                        <a href="/answer/{{ answer['id'] }}/new-comment" class="btn btn-primary">Post a new comment</a>
+                                    </div>
                                     {% for comment in comments %}
                                         {% if comment['answer_id'] == answer['id'] %}
-                                            {{ comment['message'] }}<br>
-                                            <div class="text-right font-italic" style="font-size: 14px;">Edited {{ comment['edited_count'] }} times</div>
-                                            <div class="text-right font-italic" style="font-size: 14px;">{{ comment['submission_time'] }}</div>
-                                            <a href="/comment/{{ comment['id'] }}/edit" class="btn btn-info mb-2">Edit</a>
-                                            <form action="{{ url_for('delete_comment', comment_id=comment['id']) }}" method="post">
-                                                <button type="submit" class="btn btn-primary mb-2">Delete</button>
-                                            </form>
-                                            <hr>
+                                            <div>
+                                                <p>{{ comment['message'] }}</p>
+                                                <div class="text-right" style="font-size: 14px;">Edited {{ comment['edited_count'] }} times</div>
+                                                <div class="text-right font-italic" style="font-size: 14px;">{{ comment['submission_time'] }}</div>
+                                                <div class="text-right">
+                                                    <a href="/comment/{{ comment['id'] }}/edit" class="btn btn-info mb-2">Edit</a>
+                                                    <form action="{{ url_for('delete_comment', comment_id=comment['id']) }}" method="post" style="display: inline-block;">
+                                                            <button type="submit" class="btn btn-danger mb-2">Delete</button>
+                                                    </form>
+                                                </div>
+                                                <hr>
+                                            </div>
+
+
                                         {% endif %}
                                     {% endfor %}
-                                    <a href="/answer/{{ answer['id'] }}/new-comment" class="btn btn-primary">Post a new comment</a>
+
                                 </div>
 
 
@@ -126,7 +137,5 @@
                 {% endfor %}
             </tbody>
         </table>
-        <br>
-        <a href="/question/{{ id }}/new-answer" class="btn btn-primary">Post a new answer</a>
     </div>
 {% endblock %}
