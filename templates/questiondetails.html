@@ -75,12 +75,16 @@
                                 <div><a href="" class="badge badge-secondary">python</a></div>
                                 <div class="text-right font-italic" style="font-size: 14px; padding-bottom: 5px;">{{ answer['submission_time'] }}</div>
                                 <div class="text-right">
-                                    <form action="{{ url_for('delete_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                        <button type="submit" class="btn btn-danger mb-2">Delete</button>
-                                    </form>
+
+                                    <span>
+
+                                        <a href="/answer/{{ answer['id'] }}/edit" class="btn btn-info mb-2">Editke</a>
+                                        <form action="{{ url_for('delete_answer', question_id=id, answer_id=answer['id']) }}" method="post" style="display: inline-block">
+                                            <button type="submit" class="btn btn-danger mb-2">Delete</button>
+                                        </form>
+                                    </span>
                                 </div>
-                                <div class="text-right" ><a href="/answer/{{ answer['id'] }}/edit" class="btn btn-primary">Editke</a></div>
-                                <div class="text-right font-italic" style="font-size: 14px;">{{ answer['submission_time'] }}</div>
+
 
                             </td>
                             <td>
