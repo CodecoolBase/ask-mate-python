@@ -21,6 +21,20 @@
                             </div>
                             <div><a href="" class="badge badge-secondary">python</a></div>
                             <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
+                            <hr>
+                            {% for comment in comments %}
+                                {% if comment['question_id'] == question['id'] %}
+                                    {{ comment['message'] }}<br>
+                                    <div class="text-right font-italic" style="font-size: 14px;">Edited {{ comment['edited_count'] }} times</div>
+                                    <div class="text-right font-italic" style="font-size: 14px;">{{ comment['submission_time'] }}</div>
+                                    <a href="/comment/{{ comment['id'] }}/edit" class="btn btn-info mb-2">Edit</a>
+                                    <form action="{{ url_for('delete_comment', comment_id=comment['id']) }}" method="post">
+                                        <button type="submit" class="btn btn-primary mb-2">Delete</button>
+                                    </form>
+                                    <hr>
+                                {% endif %}
+                            {% endfor %}
+                            <a href="/question/{{ question['id'] }}/new-comment" class="btn btn-primary">Post a new comment</a>
                         </td>
                         <td>
                             <div>
@@ -83,12 +97,14 @@
                                         {% if comment['answer_id'] == answer['id'] %}
                                             <div>
                                                 <p>{{ comment['message'] }}</p>
+                                                <div class="text-right" style="font-size: 14px;">Edited {{ comment['edited_count'] }} times</div>
                                                 <div class="text-right font-italic" style="font-size: 14px;">{{ comment['submission_time'] }}</div>
-                                                <form action="{{ url_for('delete_comment', comment_id=comment['id']) }}" method="post">
-                                                    <div class="text-right">
-                                                        <button type="submit" class="btn btn-danger mb-2">Delete</button>
-                                                    </div>
-                                                </form>
+                                                <div class="text-right">
+                                                    <a href="/comment/{{ comment['id'] }}/edit" class="btn btn-info mb-2">Edit</a>
+                                                    <form action="{{ url_for('delete_comment', comment_id=comment['id']) }}" method="post" style="display: inline-block;">
+                                                            <button type="submit" class="btn btn-danger mb-2">Delete</button>
+                                                    </form>
+                                                </div>
                                                 <hr>
                                             </div>
 

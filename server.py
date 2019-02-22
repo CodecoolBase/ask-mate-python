@@ -7,7 +7,8 @@ app = Flask(__name__)
 @app.route('/')
 def route_main():
     stored_questions = data_manager.get_questions()
-    return render_template('list.html', questions=stored_questions, title="Welcome!")\
+    return render_template('list.html', questions=stored_questions, title="Welcome!")
+
 
 @app.route('/list',methods=['GET'])
 def route_list():
@@ -22,12 +23,18 @@ def route_list():
     return render_template('list.html', questions=stored_questions, title="Welcome!")\
 
 
+
 @app.route('/question/<int:question_id>')
 def route_question_id(question_id):
     stored_questions = data_manager.get_questions()
     stored_answers = data_manager.get_answers()
     stored_comments = data_manager.get_comments()
-    return render_template('questiondetails.html', questions=stored_questions, answers=stored_answers, id=question_id, comments=stored_comments)
+
+    return render_template('questiondetails.html',
+                           questions=stored_questions,
+                           answers=stored_answers,
+                           id=question_id,
+                           comments=stored_comments)
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
@@ -67,13 +74,39 @@ def add_question():
     return render_template("newquestion.html")
 
 
-@app.route('/answer/<int:answer_id>/new-comment', methods=['GET', 'POST'])
-def route_new_comment(answer_id):
+@app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+@app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
+def route_new_comment(question_id='', answer_id=''):
     if request.method == "POST":
-        data_manager.add_comment(answer_id, request.form["comment"])
-        return redirect(url_for('route_list'))
+        if question_id == '':
+            data_manager.add_comment(question_id, answer_id, request.form["comment"])
+            return redirect(url_for('route_list'))
+        elif answer_id == '':
+            data_manager.add_comment(question_id, answer_id, request.form["comment"])
+            return redirect(url_for('route_list'))
 
-    return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id)
+    return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id, question_id=question_id)
+
+
+@app.route('/comment/<int:comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    comments = data_manager.get_comments()
+    question_id = data_manager.get_question_id_for_comment(comment_id)
+    if request.method == "POST":
+        edit_counter = ''
+        for comment in comments:
+            if comment['id'] == comment_id:
+                edit_counter = comment['edited_count']
+        if edit_counter is None:
+            new_message = request.form['comment']
+            data_manager.get_update_for_comment(comment_id, new_message)
+            return redirect('/')
+        elif edit_counter is not None:
+            new_message = request.form['comment']
+            data_manager.get_new_update_for_comment(comment_id, new_message)
+            return redirect('/')
+
+    return render_template('edit_comment.html', comment_id=comment_id, comments=comments)
 
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
@@ -81,7 +114,6 @@ def delete_comment(comment_id):
     if request.method == "POST":
         data_manager.delete_comments(comment_id)
         return redirect(url_for('route_list'))
-
 
 
 @app.route("/search")
