@@ -1,10 +1,11 @@
 import connection
+from psycopg2.extensions import AsIs
 from datetime import datetime
 
 
 @connection.connection_handler
 def get_questions(cursor):
-    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC;""")
+    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;""")
     questions = cursor.fetchall()
     return questions
 
@@ -18,8 +19,8 @@ def delete_question(cursor, question_id):
 
 
 @connection.connection_handler
-def get_latest5_questions(cursor):
-    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;""")
+def get_latest5_questions(cursor,order,direction):
+    cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""", {"order": AsIs(order), "direction":AsIs(direction.upper())})
     questions = cursor.fetchall()
     return questions
 
@@ -35,7 +36,6 @@ def get_answers(cursor):
 def delete_answer(cursor, answer_id):
     cursor.execute("""DELETE FROM comment WHERE answer_id=%(answer_id)s;""", {'answer_id': answer_id})
     cursor.execute("""DELETE FROM answer WHERE id=%(answer_id)s;""", {'answer_id': answer_id})
-
 
 
 @connection.connection_handler
