@@ -11,6 +11,14 @@ def get_questions(cursor):
 
 
 @connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute("""DELETE FROM question_tag WHERE question_id=%(question_id)s;""", {'question_id': question_id})
+    cursor.execute("""DELETE FROM comment WHERE question_id=%(question_id)s;""", {'question_id': question_id})
+    cursor.execute("""DELETE FROM answer WHERE question_id=%(question_id)s;""", {'question_id': question_id})
+    cursor.execute("""DELETE FROM question WHERE id=%(id)s;""", {'id': question_id})
+
+
+@connection.connection_handler
 def get_latest5_questions(cursor,order,direction):
     cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""", {"order": AsIs(order), "direction":AsIs(direction.upper())})
     questions = cursor.fetchall()
@@ -30,7 +38,6 @@ def delete_answer(cursor, answer_id):
     cursor.execute("""DELETE FROM answer WHERE id=%(answer_id)s;""", {'answer_id': answer_id})
 
 
-# Ivan's get_comments
 @connection.connection_handler
 def get_comments(cursor):
     cursor.execute("""SELECT * FROM comment ORDER BY submission_time DESC;""")

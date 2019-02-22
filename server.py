@@ -37,6 +37,13 @@ def route_question_id(question_id):
                            comments=stored_comments)
 
 
+@app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
+def delete_question(question_id):
+    if request.method == "POST":
+        data_manager.delete_question(question_id)
+        return redirect(url_for('route_list'))
+
+
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id):
     if request.method == "POST":
