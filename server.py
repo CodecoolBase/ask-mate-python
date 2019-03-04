@@ -4,6 +4,7 @@ import data_manager
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def route_main():
     stored_questions = data_manager.get_questions()
