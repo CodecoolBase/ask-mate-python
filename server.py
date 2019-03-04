@@ -167,6 +167,11 @@ def vote_down_answer(question_id, answer_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
 
+@app.route("/login")
+def login():
+    return render_template('login.html')
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
