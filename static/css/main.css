@@ -56,7 +56,14 @@
     margin-bottom: 40px;
 }
 
-.profile-head .nav-tabs{
+.profile-img img {
+    width: 80%;
+    height: 100%;
+    margin-top: 8px;
+    border-radius: 50%;
+}
+
+.profile-head .nav-tabs {
     margin-bottom:5%;
 }
 
