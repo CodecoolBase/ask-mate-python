@@ -11,7 +11,7 @@ def route_main():
     return render_template('list.html', questions=stored_questions, title="Welcome!")
 
 
-@app.route('/list',methods=['GET'])
+@app.route('/list', methods=['GET'])
 def route_list():
     stored_questions = data_manager.get_questions()
     if request.method == "GET":
@@ -20,7 +20,7 @@ def route_list():
         if order == None:
             order = 'submission_time'
             direction = 'desc'
-        stored_questions = data_manager.get_latest5_questions(order,direction)
+        stored_questions = data_manager.get_latest5_questions(order, direction)
     return render_template('list.html', questions=stored_questions, title="Welcome!")\
 
 
@@ -175,6 +175,12 @@ def login():
 @app.route("/registration")
 def register():
     return render_template('register.html')
+
+
+@app.route("/user")
+def profile():
+    stored_questions = data_manager.get_questions()
+    return render_template('user_profile.html', questions=stored_questions)
 
 
 if __name__ == "__main__":
