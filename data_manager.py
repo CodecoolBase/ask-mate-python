@@ -16,7 +16,7 @@ def delete_question(cursor, question_id):
 
 
 @connection.connection_handler
-def get_latest5_questions(cursor,order,direction):
+def get_latest5_questions(cursor, order, direction):
     cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""", {"order": AsIs(order), "direction":AsIs(direction.upper())})
     questions = cursor.fetchall()
     return questions
