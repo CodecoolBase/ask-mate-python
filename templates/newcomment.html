@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1 class="mt-4 text-xl-center" style="font-family: Monoton, Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Post a new comment</h1>
+    <h1 class="mt-4 text-xl-center" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Post a new comment</h1>
     {% if answer_id == '' %}
     <form action="{{ url_for('route_new_comment', question_id=question_id) }}" method="post">
     {% else %}
