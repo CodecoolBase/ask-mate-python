@@ -213,3 +213,11 @@ def vote_down_answer(cursor, question_id, answer_id):
     cursor.execute("""UPDATE answer
                       SET vote_number = vote_number-1
                       WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
+
+
+@connection.connection_handler
+def get_users(cursor):
+    cursor.execute("""SELECT username, registration_date FROM users ORDER BY registration_date;""")
+    users = cursor.fetchall()
+    return users
+
