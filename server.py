@@ -177,10 +177,15 @@ def register():
     return render_template('register.html')
 
 
-@app.route("/user")
+@app.route("/user/")
 def profile():
     stored_questions = data_manager.get_questions()
     return render_template('user_profile.html', questions=stored_questions)
+
+@app.route("/user/<int:question_id>")
+def profile_question(question_id):
+    stored_questions = data_manager.get_questions()
+    return render_template('user_profile.html', questions=stored_questions, question_id=question_id)
 
 
 if __name__ == "__main__":

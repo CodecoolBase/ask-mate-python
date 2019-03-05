@@ -32,6 +32,7 @@
     </div>
     <div class="col-md-12" id="user-questions">
         {% for question in questions %}
+            {% if question_id == question['id'] %}
         <div class="row row-questions">
             <div class="col-md-8">
                 <div>
@@ -60,6 +61,7 @@
             <div class="col"><hr></div>
 
         </div>
+            {% endif %}
         {% endfor %}
 
     </div>
