@@ -137,6 +137,11 @@
                                 <form action="{{ url_for('vote_up_answer', question_id=id, answer_id=answer['id']) }}" method="post">
                                     <button type="submit" class="btn btn-primary mb-2">▲</button>
                                 </form>
+
+                                <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                    <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
+                                </form>
+
                                 <form action="{{ url_for('vote_down_answer', question_id=id, answer_id=answer['id']) }}" method="post">
                                     <button type="submit" class="btn btn-primary mb-2">▼</button>
                                 </form>

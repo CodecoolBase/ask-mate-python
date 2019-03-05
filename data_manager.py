@@ -226,3 +226,16 @@ def registration(cursor, username, hashed_password):
     }
     cursor.execute("""INSERT INTO users(username, password)
                       VALUES(%(username)s, %(password)s);""", user_details)
+
+
+@connection.connection_handler
+def accept_answer(cursor, question_id, answer_id):
+
+    variables = {
+        'question_id': question_id,
+        'answer_id': answer_id
+    }
+
+    cursor.execute("""UPDATE answer
+                      SET vote_number = vote_number+1
+                      WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
