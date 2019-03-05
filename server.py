@@ -1,4 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
+import bcrypt
+import os
 import data_manager
 
 
@@ -45,6 +47,9 @@ def delete_question(question_id):
         return redirect(url_for('route_list'))
 
 
+
+
+
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id):
     if request.method == "POST":
@@ -52,6 +57,20 @@ def route_new_answer(question_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
     return render_template('answer.html', title="Add New Answer!", question_id=question_id)
+
+
+
+@app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
+def edit_question(question_id):
+    questions = data_manager.get_questions()
+    if request.method == "POST":
+        new_message = request.form['message']
+        new_title = request.form['title']
+        data_manager.get_update_question(question_id,new_message,new_title)
+        return redirect(f'/question/{question_id}')
+
+
+    return render_template('edit_question.html', questions=questions, question_id=question_id)
 
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
@@ -172,9 +191,22 @@ def login():
     return render_template('login.html')
 
 
-@app.route("/registration")
+@app.route("/registration", methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    if request.method == 'GET':
+        return render_template('register.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        data_manager.registration(username, hashed_password)
+        return redirect(url_for('route_main'))
+
+
+@app.route('/users')
+def route_users():
+    stored_users = data_manager.get_users()
+    return render_template('users_list.html', users=stored_users, title="Welcome!")
 
 
 @app.route("/user")
