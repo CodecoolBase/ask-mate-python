@@ -112,6 +112,12 @@ def get_update(cursor,answer_id , message):
     cursor.execute("""UPDATE answer SET message = %(message)s,submission_time = %(time)s WHERE id=%(answer_id)s;""",
                    {"message": message, 'answer_id': answer_id, 'time': time})
 
+@connection.connection_handler
+def get_update_question(cursor,question_id , message,title):
+    time = datetime.now()
+    cursor.execute("""UPDATE question SET message = %(message)s,submission_time = %(time)s,title = %(title)s WHERE id=%(question_id)s;""",
+                   {"message": message, 'question_id': question_id, 'time': time, 'title': title})
+
 
 @connection.connection_handler
 def get_update_for_comment(cursor, comment_id, message):
@@ -210,3 +216,13 @@ def vote_down_answer(cursor, question_id, answer_id):
     cursor.execute("""UPDATE answer
                       SET vote_number = vote_number-1
                       WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
+
+
+@connection.connection_handler
+def registration(cursor, username, hashed_password):
+    user_details = {
+        'username': username,
+        'password': hashed_password
+    }
+    cursor.execute("""INSERT INTO users(username, password)
+                      VALUES(%(username)s, %(password)s);""", user_details)
