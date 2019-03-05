@@ -226,3 +226,10 @@ def registration(cursor, username, hashed_password):
     }
     cursor.execute("""INSERT INTO users(username, password)
                       VALUES(%(username)s, %(password)s);""", user_details)
+
+
+def get_users(cursor):
+    cursor.execute("""SELECT username, registration_date FROM users ORDER BY registration_date;""")
+    users = cursor.fetchall()
+    return users
+

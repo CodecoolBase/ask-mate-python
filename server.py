@@ -203,6 +203,12 @@ def register():
         return redirect(url_for('route_main'))
 
 
+@app.route('/users')
+def route_users():
+    stored_users = data_manager.get_users()
+    return render_template('users_list.html', users=stored_users, title="Welcome!")
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
