@@ -180,9 +180,12 @@ def vote_down_answer(question_id, answer_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        pass
 
 
 @app.route("/registration", methods=['GET', 'POST'])
