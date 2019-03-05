@@ -77,7 +77,6 @@ DROP SEQUENCE IF EXISTS public.users_id_seq;
 CREATE TABLE users (
     id serial NOT NULL,
     username varchar(255) NOT NULL,
-    salt varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
     registration_date date NOT NULL DEFAULT CURRENT_DATE
 );
