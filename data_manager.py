@@ -213,3 +213,13 @@ def vote_down_answer(cursor, question_id, answer_id):
     cursor.execute("""UPDATE answer
                       SET vote_number = vote_number-1
                       WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
+
+
+@connection.connection_handler
+def registration(cursor, username, hashed_password):
+    user_details = {
+        'username': username,
+        'password': hashed_password
+    }
+    cursor.execute("""INSERT INTO users(username, password)
+                      VALUES(%(username)s, %(password)s);""", user_details)

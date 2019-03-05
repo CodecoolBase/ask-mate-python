@@ -1,4 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
+import bcrypt
+import os
 import data_manager
 
 
@@ -172,9 +174,16 @@ def login():
     return render_template('login.html')
 
 
-@app.route("/registration")
+@app.route("/registration", methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    if request.method == 'GET':
+        return render_template('register.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        data_manager.registration(username, hashed_password)
+        return redirect(url_for('route_main'))
 
 
 if __name__ == "__main__":
