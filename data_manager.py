@@ -229,3 +229,12 @@ def registration(cursor, username, hashed_password):
     }
     cursor.execute("""INSERT INTO users(username, password)
                       VALUES(%(username)s, %(password)s);""", user_details)
+
+
+@connection.connection_handler
+def get_password_by_username(cursor, username):
+
+    cursor.execute("""SELECT password FROM users
+                      WHERE username = %(username)s;""", {'username': username})
+    password = cursor.fetchall()
+    return password

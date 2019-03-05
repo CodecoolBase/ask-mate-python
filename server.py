@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, make_response
 import bcrypt
 import data_manager
 
@@ -185,7 +185,22 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        pass
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = data_manager.get_password_by_username(username)
+        hashed_password = hashed_password.encode('utf-8')
+        if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
+            return redirect(url_for('cookie_insertion', username=username))
+        else:
+            pass  # need to implement error message returning
+
+
+@app.route('/set-cookie')
+def cookie_insertion(username):
+    redirect_to_index = redirect('/')
+    response = make_response(redirect_to_index)
+    response.set_cookie('username', username=username)
+    return response
 
 
 @app.route("/registration", methods=['GET', 'POST'])
@@ -196,6 +211,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        hashed_password = hashed_password.decode('utf-8')
         data_manager.registration(username, hashed_password)
         return redirect(url_for('route_main'))
 
