@@ -228,6 +228,7 @@ def registration(cursor, username, hashed_password):
                       VALUES(%(username)s, %(password)s);""", user_details)
 
 
+@connection.connection_handler
 def get_users(cursor):
     cursor.execute("""SELECT username, registration_date FROM users ORDER BY registration_date;""")
     users = cursor.fetchall()
