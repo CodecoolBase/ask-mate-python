@@ -210,6 +210,13 @@ def accept_answer(question_id, answer_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
 
+# @app.route("/question/<int:question_id>/<int:answer_id>/unaccept-answer", methods=['GET', 'POST'])
+# def unaccept_answer(question_id, answer_id):
+#     if request.method == 'POST':
+#         data_manager.unaccept_answer(question_id, answer_id)
+#         return redirect(url_for('route_question_id', question_id=question_id))
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
