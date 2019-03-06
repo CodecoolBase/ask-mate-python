@@ -82,7 +82,7 @@ def add_answer(cursor, question_id, message):
 def add_comment(cursor, question_id, answer_id, message):
     if question_id == '':
         user_story = {
-            'submission_time': datetime.now(),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'message': message,
             'answer_id': answer_id
         }
@@ -92,7 +92,7 @@ def add_comment(cursor, question_id, answer_id, message):
 
     elif answer_id == '':
         user_story = {
-            'submission_time': datetime.now(),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'message': message,
             'question_id': question_id
         }
