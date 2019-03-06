@@ -239,12 +239,6 @@ def route_users():
     return render_template('users_list.html', users=stored_users, title="Welcome!")
 
 
-@app.route("/user")
-def profile():
-    stored_questions = data_manager.get_questions()
-    return render_template('user_profile.html', questions=stored_questions)
-
-
 if __name__ == "__main__":
     app.run(
         debug=True,
