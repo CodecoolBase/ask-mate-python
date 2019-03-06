@@ -7,6 +7,11 @@ import data_manager
 app = Flask(__name__)
 
 
+@app.route('/index')
+def route_index():
+    return render_template('index.html',  title="Welcome!")
+
+
 @app.route('/')
 def route_main():
     stored_questions = data_manager.get_questions()
