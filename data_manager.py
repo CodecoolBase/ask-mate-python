@@ -19,8 +19,9 @@ def delete_question(cursor, question_id):
 
 
 @connection.connection_handler
-def get_latest5_questions(cursor,order,direction):
-    cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""", {"order": AsIs(order), "direction":AsIs(direction.upper())})
+def get_latest5_questions(cursor, order, direction):
+    cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""",
+                   {"order": AsIs(order), "direction": AsIs(direction.upper())})
     questions = cursor.fetchall()
     return questions
 
@@ -57,7 +58,8 @@ def add_question(cursor, title, message):
     }
 
     cursor.execute("""INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
-                      VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);""",
+                      VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s,
+                      %(title)s, %(message)s, %(image)s);""",
                    user_story)
 
     cursor.execute("""SELECT id FROM question
@@ -78,7 +80,8 @@ def add_answer(cursor, question_id, message):
     }
 
     cursor.execute("""INSERT INTO answer(submission_time, vote_number, question_id, message, image)
-                      VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""", user_story)
+                      VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""",
+                   user_story)
 
 
 @connection.connection_handler
@@ -110,15 +113,17 @@ def delete_comments(cursor, comment_id):
 
 
 @connection.connection_handler
-def get_update(cursor,answer_id , message):
+def get_update(cursor, answer_id, message):
     time = datetime.now()
     cursor.execute("""UPDATE answer SET message = %(message)s,submission_time = %(time)s WHERE id=%(answer_id)s;""",
                    {"message": message, 'answer_id': answer_id, 'time': time})
 
+
 @connection.connection_handler
-def get_update_question(cursor,question_id , message,title):
+def get_update_question(cursor, question_id, message, title):
     time = datetime.now()
-    cursor.execute("""UPDATE question SET message = %(message)s,submission_time = %(time)s,title = %(title)s WHERE id=%(question_id)s;""",
+    cursor.execute("""UPDATE question SET message = %(message)s,submission_time = %(time)s,title = %(title)s 
+                        WHERE id=%(question_id)s;""",
                    {"message": message, 'question_id': question_id, 'time': time, 'title': title})
 
 
@@ -129,7 +134,8 @@ def get_update_for_comment(cursor, comment_id, message):
                       message = %(message)s, 
                       submission_time = %(time)s, 
                       edited_count = %(count)s 
-                      WHERE id=%(comment_id)s;""", {"message": message, 'comment_id': comment_id, 'time': time, 'count': 1})
+                      WHERE id=%(comment_id)s;""",
+                   {"message": message, 'comment_id': comment_id, 'time': time, 'count': 1})
 
 
 @connection.connection_handler
@@ -165,7 +171,8 @@ def get_question_id_for_comment(cursor, comment_id):
 @connection.connection_handler
 def search_in(cursor, searched_word):
     cursor.execute("""SELECT question.* FROM question LEFT JOIN answer ON question.id = answer.question_id
-                      WHERE (LOWER(title) LIKE %(searched_word)s OR LOWER(answer.message) LIKE %(searched_word)s OR LOWER(question.message) LIKE %(searched_word)s);""",
+                      WHERE (LOWER(title) LIKE %(searched_word)s OR LOWER(answer.message) LIKE %(searched_word)s 
+                      OR LOWER(question.message) LIKE %(searched_word)s);""",
                    {'searched_word': '%' + searched_word + '%'})
     searched_data = cursor.fetchall()
     return searched_data
@@ -253,4 +260,3 @@ def check_username(cursor, username):
         return user['username']
     else:
         return None
-

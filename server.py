@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response
+from flask import Flask, render_template, redirect, url_for, request, make_response, session, escape
 import bcrypt
 import data_manager
 
@@ -6,8 +6,13 @@ import data_manager
 app = Flask(__name__)
 
 
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
 @app.route('/')
 def route_main():
+    if 'username' not in session:
+        session['username'] = None
     stored_questions = data_manager.get_questions()
     return render_template('list.html', questions=stored_questions, title="Welcome!")
 
@@ -112,7 +117,6 @@ def route_new_comment(question_id='', answer_id=''):
 @app.route('/comment/<int:comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(comment_id):
     comments = data_manager.get_comments()
-    question_id = data_manager.get_question_id_for_comment(comment_id)
     if request.method == "POST":
         edit_counter = ''
         for comment in comments:
@@ -191,6 +195,7 @@ def login():
         if hashed_password is not None:
             hashed_password = hashed_password.encode('utf-8')
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
+                session['username'] = username
                 return redirect(url_for('cookie_insertion', username=username))
             else:
                 return render_template('login.html', error="not valid")
@@ -220,6 +225,11 @@ def register():
             hashed_password = hashed_password.decode('utf-8')
             data_manager.registration(username, hashed_password)
             return redirect(url_for('route_main'))
+
+
+@app.route('/logout')
+def logout():
+    pass
 
 
 if __name__ == "__main__":
