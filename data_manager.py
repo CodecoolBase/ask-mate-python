@@ -236,5 +236,15 @@ def get_password_by_username(cursor, username):
 
     cursor.execute("""SELECT password FROM users
                       WHERE username = %(username)s;""", {'username': username})
-    password = cursor.fetchall()
-    return password
+    password = cursor.fetchone()
+    return password['password']
+
+
+@connection.connection_handler
+def check_username(cursor, username):
+
+    cursor.execute("""SELECT username FROM users
+                      WHERE username = %(username)s;""", {'username': username})
+    user = cursor.fetchone()
+    return user['username']
+

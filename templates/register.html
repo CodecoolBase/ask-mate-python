@@ -8,7 +8,12 @@
         <form class="form-login" action="" method="post">
             <h2>Sign Up</h2>
             <div class="form-group">
-                <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Enter username">
+                {% if error == None %}
+                    <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Enter username">
+                {% endif %}
+                {% if error == "taken" %}
+                    <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Username already taken">
+                {% endif %}
             </div>
             <div class="form-group">
                 <input type="password" class="form-control" name="password" placeholder="Password">

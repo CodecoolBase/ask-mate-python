@@ -7,6 +7,9 @@
 
         <form class="form-login" action="" method="post">
             <h2>Log In</h2>
+            {%  if error == "not valid" %}
+                <h3>Username or password is invalid!</h3>
+            {% endif %}
             <div class="form-group">
                 <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Enter username">
             </div>

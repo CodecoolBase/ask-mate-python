@@ -183,7 +183,7 @@ def vote_down_answer(question_id, answer_id):
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('login.html', error=None)
     elif request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -192,28 +192,31 @@ def login():
         if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
             return redirect(url_for('cookie_insertion', username=username))
         else:
-            pass  # need to implement error message returning
+            return render_template('login.html', error="not valid")
 
 
-@app.route('/set-cookie')
+@app.route('/set-cookie/<username>')
 def cookie_insertion(username):
     redirect_to_index = redirect('/')
     response = make_response(redirect_to_index)
-    response.set_cookie('username', username=username)
+    response.set_cookie('username', value=username)
     return response
 
 
 @app.route("/registration", methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        return render_template('register.html', error=None)
     elif request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        hashed_password = hashed_password.decode('utf-8')
-        data_manager.registration(username, hashed_password)
-        return redirect(url_for('route_main'))
+        if data_manager.check_username(username) == username:
+            return render_template('register.html', error="taken")
+        else:
+            password = request.form['password']
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            hashed_password = hashed_password.decode('utf-8')
+            data_manager.registration(username, hashed_password)
+            return redirect(url_for('route_main'))
 
 
 if __name__ == "__main__":
