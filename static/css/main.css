@@ -1,3 +1,5 @@
+/********** Register and login css **********/
+
 .wrapper {
     margin-top: 40px;
 }
@@ -44,4 +46,41 @@
      height: 1px;
      margin-top: 0px !important;
      margin-bottom: 0px !important;
+}
+
+/*********** Profile css **********/
+
+.user_name {
+    font-family: 'Fredericka the Great', Tahoma, sans-serif;
+    margin-top: 8px;
+    margin-bottom: 40px;
+}
+
+.profile-img img {
+    width: 80%;
+    height: 100%;
+    margin-top: 8px;
+    border-radius: 50%;
+}
+
+.profile-head .nav-tabs {
+    margin-bottom:5%;
+}
+
+.profile-head .nav-tabs .nav-link {
+    font-weight: 600;
+    border: none;
+}
+
+.nav-item-profile {
+    font-family: 'Fredericka the Great', Tahoma, sans-serif;
+    font-size: 18px;
+}
+
+.row-header {
+    margin-bottom: 28px;
+}
+
+.row-questions {
+    margin-bottom: 16px;
 }

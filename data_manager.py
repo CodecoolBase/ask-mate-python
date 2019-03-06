@@ -12,16 +12,14 @@ def get_questions(cursor):
 
 @connection.connection_handler
 def delete_question(cursor, question_id):
-    cursor.execute("""DELETE FROM question_tag WHERE question_id=%(question_id)s;""", {'question_id': question_id})
-    cursor.execute("""DELETE FROM comment WHERE question_id=%(question_id)s;""", {'question_id': question_id})
-    cursor.execute("""DELETE FROM answer WHERE question_id=%(question_id)s;""", {'question_id': question_id})
     cursor.execute("""DELETE FROM question WHERE id=%(id)s;""", {'id': question_id})
 
 
 @connection.connection_handler
 def get_latest5_questions(cursor, order, direction):
-    cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""",
-                   {"order": AsIs(order), "direction": AsIs(direction.upper())})
+
+    cursor.execute("""SELECT * FROM question ORDER BY %(order)s %(direction)s;""", {"order": AsIs(order), "direction":AsIs(direction.upper())})
+
     questions = cursor.fetchall()
     return questions
 
@@ -88,7 +86,7 @@ def add_answer(cursor, question_id, message):
 def add_comment(cursor, question_id, answer_id, message):
     if question_id == '':
         user_story = {
-            'submission_time': datetime.now(),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'message': message,
             'answer_id': answer_id
         }
@@ -98,7 +96,7 @@ def add_comment(cursor, question_id, answer_id, message):
 
     elif answer_id == '':
         user_story = {
-            'submission_time': datetime.now(),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'message': message,
             'question_id': question_id
         }
@@ -269,3 +267,11 @@ def get_user_id_by_username(cursor, username):
 
     user_id = cursor.fetchone()
     return user_id['id']
+
+
+@connection.connection_handler
+def get_users(cursor):
+    cursor.execute("""SELECT username, registration_date FROM users ORDER BY registration_date;""")
+    users = cursor.fetchall()
+    return users
+

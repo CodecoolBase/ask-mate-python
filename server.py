@@ -233,6 +233,18 @@ def profile(user_id):
     pass
 
 
+@app.route('/users')
+def route_users():
+    stored_users = data_manager.get_users()
+    return render_template('users_list.html', users=stored_users, title="Welcome!")
+
+
+@app.route("/user")
+def profile():
+    stored_questions = data_manager.get_questions()
+    return render_template('user_profile.html', questions=stored_questions)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
