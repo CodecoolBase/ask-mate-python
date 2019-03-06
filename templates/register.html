@@ -7,13 +7,11 @@
 
         <form class="form-login" action="" method="post">
             <h2>Sign Up</h2>
+            {% if error == "taken" %}
+                <h3>Username is already taken!</h3>
+            {% endif %}
             <div class="form-group">
-                {% if error == None %}
-                    <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Enter username">
-                {% endif %}
-                {% if error == "taken" %}
-                    <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Username already taken">
-                {% endif %}
+                <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Enter username">
             </div>
             <div class="form-group">
                 <input type="password" class="form-control" name="password" placeholder="Password">

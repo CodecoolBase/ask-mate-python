@@ -188,9 +188,12 @@ def login():
         username = request.form['username']
         password = request.form['password']
         hashed_password = data_manager.get_password_by_username(username)
-        hashed_password = hashed_password.encode('utf-8')
-        if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
-            return redirect(url_for('cookie_insertion', username=username))
+        if hashed_password is not None:
+            hashed_password = hashed_password.encode('utf-8')
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
+                return redirect(url_for('cookie_insertion', username=username))
+            else:
+                return render_template('login.html', error="not valid")
         else:
             return render_template('login.html', error="not valid")
 

@@ -237,7 +237,10 @@ def get_password_by_username(cursor, username):
     cursor.execute("""SELECT password FROM users
                       WHERE username = %(username)s;""", {'username': username})
     password = cursor.fetchone()
-    return password['password']
+    if password is not None:
+        return password['password']
+    else:
+        return None
 
 
 @connection.connection_handler
@@ -246,5 +249,8 @@ def check_username(cursor, username):
     cursor.execute("""SELECT username FROM users
                       WHERE username = %(username)s;""", {'username': username})
     user = cursor.fetchone()
-    return user['username']
+    if user is not None:
+        return user['username']
+    else:
+        return None
 
