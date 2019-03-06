@@ -1,18 +1,18 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response, session, escape
+from flask import Flask, render_template, redirect, url_for, request, session
 import bcrypt
 import data_manager
+from datetime import timedelta
 
 
 app = Flask(__name__)
 
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
 
 
 @app.route('/')
 def route_main():
-    if 'username' not in session:
-        session['username'] = None
     stored_questions = data_manager.get_questions()
     return render_template('list.html', questions=stored_questions, title="Welcome!")
 
@@ -196,19 +196,13 @@ def login():
             hashed_password = hashed_password.encode('utf-8')
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
                 session['username'] = username
-                return redirect(url_for('cookie_insertion', username=username))
+                session['user_id'] = int(data_manager.get_user_id_by_username(username))
+                session.permanent = True
+                return redirect(url_for('route_main'))
             else:
                 return render_template('login.html', error="not valid")
         else:
             return render_template('login.html', error="not valid")
-
-
-@app.route('/set-cookie/<username>')
-def cookie_insertion(username):
-    redirect_to_index = redirect('/')
-    response = make_response(redirect_to_index)
-    response.set_cookie('username', value=username)
-    return response
 
 
 @app.route("/registration", methods=['GET', 'POST'])
@@ -229,6 +223,13 @@ def register():
 
 @app.route('/logout')
 def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)
+    return redirect(url_for('route_main'))
+
+
+@app.route('/user/<int:user_id>')
+def profile(user_id):
     pass
 
 
