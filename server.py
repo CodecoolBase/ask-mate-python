@@ -1,10 +1,14 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 import bcrypt
-import os
 import data_manager
+from datetime import timedelta
 
 
 app = Flask(__name__)
+
+
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
 
 
 @app.route('/')
@@ -19,7 +23,7 @@ def route_list():
     if request.method == "GET":
         order = request.args.get('order_by')
         direction = request.args.get('direction')
-        if order == None:
+        if order is None:
             order = 'submission_time'
             direction = 'desc'
         stored_questions = data_manager.get_latest5_questions(order, direction)
@@ -48,9 +52,6 @@ def delete_question(question_id):
         return redirect(url_for('route_list'))
 
 
-
-
-
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id):
     if request.method == "POST":
@@ -60,16 +61,14 @@ def route_new_answer(question_id):
     return render_template('answer.html', title="Add New Answer!", question_id=question_id)
 
 
-
 @app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
 def edit_question(question_id):
     questions = data_manager.get_questions()
     if request.method == "POST":
         new_message = request.form['message']
         new_title = request.form['title']
-        data_manager.get_update_question(question_id,new_message,new_title)
+        data_manager.get_update_question(question_id, new_message, new_title)
         return redirect(f'/question/{question_id}')
-
 
     return render_template('edit_question.html', questions=questions, question_id=question_id)
 
@@ -121,7 +120,6 @@ def route_new_comment(question_id='', answer_id=''):
 @app.route('/comment/<int:comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(comment_id):
     comments = data_manager.get_comments()
-    question_id = data_manager.get_question_id_for_comment(comment_id)
     if request.method == "POST":
         edit_counter = ''
         for comment in comments:
@@ -189,21 +187,42 @@ def vote_down_answer(question_id, answer_id):
         return redirect(url_for('route_question_id', question_id=question_id))
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'GET':
+        return render_template('login.html', error=None)
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = data_manager.get_password_by_username(username)
+        if hashed_password is not None:
+            hashed_password = hashed_password.encode('utf-8')
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password) is True:
+                session['username'] = username
+                session['user_id'] = int(data_manager.get_user_id_by_username(username))
+                session.permanent = True
+                return redirect(url_for('route_main'))
+            else:
+                return render_template('login.html', error="not valid")
+        else:
+            return render_template('login.html', error="not valid")
 
 
 @app.route("/registration", methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        return render_template('register.html', error=None)
     elif request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        data_manager.registration(username, hashed_password)
-        return redirect(url_for('route_main'))
+        if data_manager.check_username(username) == username:
+            return render_template('register.html', error="taken")
+        else:
+            password = request.form['password']
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            hashed_password = hashed_password.decode('utf-8')
+            data_manager.registration(username, hashed_password)
+            return redirect(url_for('route_main'))
+
 
 
 @app.route("/user/<int:user_id>/")
@@ -211,6 +230,7 @@ def profile(user_id):
     stored_questions = data_manager.get_questions()
     user_name = data_manager.get_user_name(user_id)
     return render_template('user_profile.html', questions=stored_questions, user_id=user_id,user_name=user_name)
+
 
 @app.route("/user/<int:user_id>/<type>")
 def profile_question(user_id,type):
@@ -224,6 +244,19 @@ def profile_question(user_id,type):
         return redirect(url_for('route_main'))
     user_name = data_manager.get_user_name(user_id)
     return render_template('user_profile.html', datas=some_data, user_id=user_id, user_name=user_name)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)
+    return redirect(url_for('route_main'))
+
+
+@app.route('/users')
+def route_users():
+    stored_users = data_manager.get_users()
+    return render_template('users_list.html', users=stored_users, title="Welcome!")
 
 
 
