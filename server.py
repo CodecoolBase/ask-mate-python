@@ -234,16 +234,17 @@ def profile(user_id):
 
 @app.route("/user/<int:user_id>/<type>")
 def profile_question(user_id,type):
-    if type == "question":
-        some_data = data_manager.get_questions()
-    elif type == "answer":
-        some_data = data_manager.get_answers_for_user()
-    elif type =="comment":
-        some_data = data_manager.get_comment_for_user()
+    if 'username' in session:
+        if type == "question":
+            some_data = data_manager.get_questions()
+        elif type == "answer":
+            some_data = data_manager.get_answers_for_user()
+        elif type =="comment":
+            some_data = data_manager.get_comment_for_user()
+        user_name = data_manager.get_user_name(user_id)
+        return render_template('user_profile.html', datas=some_data, user_id=user_id, user_name=user_name)
     else:
         return redirect(url_for('route_main'))
-    user_name = data_manager.get_user_name(user_id)
-    return render_template('user_profile.html', datas=some_data, user_id=user_id, user_name=user_name)
 
 
 @app.route('/logout')
