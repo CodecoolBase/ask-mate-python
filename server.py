@@ -12,6 +12,11 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
 
 
 @app.route('/')
+def route_index():
+    return render_template('index.html',  title="Welcome!")
+
+
+@app.route('/list')
 def route_main():
     stored_questions = data_manager.get_questions_fix()
     return render_template('list.html', questions=stored_questions, title="Welcome!")
