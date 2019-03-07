@@ -98,11 +98,13 @@
                                     <div class="text-right">
                                         <span>
                                               <span style="display: inline-block;">
-                                                  {% if answer['acception'] == False and session.get("username") != None %}
-                                                  <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                                      <button type="submit" class="btn btn-light mb-2"><i class="fas fa-check"></i></button>
-                                                  </form>
-                                              {% endif %}
+                                                  {% if answer['acception'] == False %}
+                                                      {% if session["user_id"] == user_id %}
+                                                      <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                                          <button type="submit" class="btn btn-light mb-2"><i class="fas fa-check"></i></button>
+                                                      </form>
+                                                      {%  endif %}
+                                                  {% endif %}
                                               </span>
                                               <span style='font-size:15px;'>
                                                   {% if answer['acception'] == True %}
@@ -135,7 +137,6 @@
                                     </span>
                                 </div>
                             </td>
-
                         </tr>
                     {% endif %}
                 {% endfor %}
