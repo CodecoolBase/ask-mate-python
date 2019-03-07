@@ -143,26 +143,17 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="badge badge-info">Vote</div>
-                                <form action="{{ url_for('vote_up_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                    <button type="submit" class="btn btn-primary mb-2">▲</button>
-                                </form>
-
-                                <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                    <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
-                                </form>
+                                {% if answer['acception'] == False and session.get("username") != None %}
+                                    <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                        <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
+                                    </form>
+                                {% endif %}
 
                                 <span style='font-size:15px;'>
                                     {% if answer['acception'] == True %}
                                         &#10004;Accepted by user
                                     {% endif %}
                                 </span>
-
-
-
-                                <form action="{{ url_for('vote_down_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                    <button type="submit" class="btn btn-primary mb-2">▼</button>
-                                </form>
 
                         </tr>
                     {% endif %}
