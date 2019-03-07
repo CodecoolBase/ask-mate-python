@@ -302,7 +302,7 @@ def get_user_id_by_username(cursor, username):
 
 @connection.connection_handler
 def get_users(cursor):
-    cursor.execute("""SELECT username, registration_date FROM users ORDER BY registration_date;""")
+    cursor.execute("""SELECT * FROM users ORDER BY registration_date;""")
     users = cursor.fetchall()
     return users
 
