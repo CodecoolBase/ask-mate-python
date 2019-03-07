@@ -36,13 +36,15 @@ def route_question_id(question_id):
     stored_questions = data_manager.get_questions()
     stored_answers = data_manager.get_answers()
     stored_comments = data_manager.get_comments()
+    user_id = data_manager.get_user_id_by_question_id(question_id)
 
     return render_template('questiondetails.html',
                            questions=stored_questions,
                            answers=stored_answers,
                            id=question_id,
                            comments=stored_comments,
-                           question_id=question_id)
+                           question_id=question_id,
+                           user_id=user_id)
 
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])

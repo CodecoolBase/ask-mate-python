@@ -125,10 +125,12 @@
                                 </div>
                             </td>
                             <td>
-                                {% if answer['acception'] == False and session.get("username") != None %}
-                                    <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                        <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
-                                    </form>
+                                {% if answer['acception'] == False %}
+                                    {% if session["user_id"] == user_id["user_id"] %}
+                                        <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                            <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
+                                        </form>
+                                    {% endif %}
                                 {% endif %}
 
                                 <span style='font-size:15px;'>
@@ -136,7 +138,7 @@
                                         &#10004;Accepted by user
                                     {% endif %}
                                 </span>
-
+                            </td>
                         </tr>
                     {% endif %}
                 {% endfor %}
