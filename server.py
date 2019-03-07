@@ -47,49 +47,64 @@ def route_question_id(question_id):
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
 def delete_question(question_id):
-    if request.method == "POST":
-        data_manager.delete_question(question_id)
-        return redirect(url_for('route_list'))
+    if 'username' in session:
+        if request.method == "POST":
+            data_manager.delete_question(question_id)
+            return redirect(url_for('route_list'))
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id):
-    if request.method == "POST":
-        data_manager.add_answer(question_id, request.form["answer"])
-        return redirect(url_for('route_question_id', question_id=question_id))
+    if 'username' in session:
+        if request.method == "POST":
+            data_manager.add_answer(question_id, request.form["answer"])
+            return redirect(url_for('route_question_id', question_id=question_id))
 
-    return render_template('answer.html', title="Add New Answer!", question_id=question_id)
+        return render_template('answer.html', title="Add New Answer!", question_id=question_id)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
 def edit_question(question_id):
-    questions = data_manager.get_questions()
-    if request.method == "POST":
-        new_message = request.form['message']
-        new_title = request.form['title']
-        data_manager.get_update_question(question_id, new_message, new_title)
-        return redirect(f'/question/{question_id}')
+    if 'username' in session:
+        questions = data_manager.get_questions()
+        if request.method == "POST":
+            new_message = request.form['message']
+            new_title = request.form['title']
+            data_manager.get_update_question(question_id, new_message, new_title)
+            return redirect(f'/question/{question_id}')
 
-    return render_template('edit_question.html', questions=questions, question_id=question_id)
+        return render_template('edit_question.html', questions=questions, question_id=question_id)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
 def edit_answer(answer_id):
-    answers = data_manager.get_answers()
-    question_id = data_manager.get_question_id(answer_id)
-    if request.method == "POST":
-        new_message = request.form['answer']
-        data_manager.get_update(answer_id, new_message)
-        return redirect(f'/question/{question_id}')
+    if 'username' in session:
+        answers = data_manager.get_answers()
+        question_id = data_manager.get_question_id(answer_id)
+        if request.method == "POST":
+            new_message = request.form['answer']
+            data_manager.get_update(answer_id, new_message)
+            return redirect(f'/question/{question_id}')
 
-    return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
+        return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
 def delete_answer(answer_id):
-    if request.method == "POST":
-        data_manager.delete_answer(answer_id)
-        return redirect(url_for('route_list'))
+    if 'username' in session:
+        if request.method == "POST":
+            data_manager.delete_answer(answer_id)
+            return redirect(url_for('route_list'))
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -107,44 +122,54 @@ def add_question():
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 @app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
 def route_new_comment(question_id='', answer_id=''):
-    if request.method == "POST":
-        if question_id == '':
-            print("answer comment")
-            data_manager.add_comment(str(data_manager.get_question_id(answer_id)), answer_id, request.form["comment"])
-            return redirect(url_for('route_list'))
-        elif answer_id == '':
-            print("question comment")
-            data_manager.add_comment(question_id,None, request.form["comment"])
-            return redirect(url_for('route_list'))
+    if 'username' in session:
+        if request.method == "POST":
+            if question_id == '':
+                print("answer comment")
+                data_manager.add_comment(str(data_manager.get_question_id(answer_id)), answer_id, request.form["comment"])
+                return redirect(url_for('route_list'))
+            elif answer_id == '':
+                print("question comment")
+                data_manager.add_comment(question_id,None, request.form["comment"])
+                return redirect(url_for('route_list'))
 
-    return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id, question_id=question_id)
+        return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id, question_id=question_id)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/comment/<int:comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(comment_id):
-    comments = data_manager.get_comments()
-    if request.method == "POST":
-        edit_counter = ''
-        for comment in comments:
-            if comment['id'] == comment_id:
-                edit_counter = comment['edited_count']
-        if edit_counter is None:
-            new_message = request.form['comment']
-            data_manager.get_update_for_comment(comment_id, new_message)
-            return redirect('/')
-        elif edit_counter is not None:
-            new_message = request.form['comment']
-            data_manager.get_new_update_for_comment(comment_id, new_message)
-            return redirect('/')
+    if 'username' in session:
+        comments = data_manager.get_comments()
+        if request.method == "POST":
+            edit_counter = ''
+            for comment in comments:
+                if comment['id'] == comment_id:
+                    edit_counter = comment['edited_count']
+            if edit_counter is None:
+                new_message = request.form['comment']
+                data_manager.get_update_for_comment(comment_id, new_message)
+                return redirect('/')
+            elif edit_counter is not None:
+                new_message = request.form['comment']
+                data_manager.get_new_update_for_comment(comment_id, new_message)
+                return redirect('/')
 
-    return render_template('edit_comment.html', comment_id=comment_id, comments=comments)
+        return render_template('edit_comment.html', comment_id=comment_id, comments=comments)
+    else:
+        return redirect(url_for('login'))
+
 
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
 def delete_comment(comment_id):
-    if request.method == "POST":
-        data_manager.delete_comments(comment_id)
-        return redirect(url_for('route_list'))
+    if 'username' in session:
+        if request.method == "POST":
+            data_manager.delete_comments(comment_id)
+            return redirect(url_for('route_list'))
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route("/search")
