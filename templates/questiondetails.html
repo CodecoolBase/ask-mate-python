@@ -29,7 +29,6 @@
                                     <button type="submit" class="btn btn-danger mb-2"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </div>
-                            <hr>
                             <div class="text-right font-italic" style="font-size: 14px;">{{ question['submission_time'] }}</div>
                         </td>
                         <td>
@@ -98,6 +97,18 @@
                                     <p>{{ answer['message'] }}</p>
                                     <div class="text-right">
                                         <span>
+                                              <span style="display: inline-block;">
+                                                  {% if answer['acception'] == False and session.get("username") != None %}
+                                                  <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
+                                                      <button type="submit" class="btn btn-light mb-2"><i class="fas fa-check"></i></button>
+                                                  </form>
+                                              {% endif %}
+                                              </span>
+                                              <span style='font-size:15px;'>
+                                                  {% if answer['acception'] == True %}
+                                                      &#10004;Accepted by user
+                                                  {% endif %}
+                                              </span>
                                             <a href="/answer/{{ answer['id'] }}/new-comment" class="btn btn-primary mb-2"><i class="fas fa-plus-circle"> Comment</i></a>
                                             <a href="/answer/{{ answer['id'] }}/edit" class="btn btn-info mb-2"><i class="fas fa-edit"></i></a>
                                             <form action="{{ url_for('delete_answer', question_id=id, answer_id=answer['id']) }}" method="post" style="display: inline-block">
@@ -124,18 +135,6 @@
                                     </span>
                                 </div>
                             </td>
-                            <td>
-                                {% if answer['acception'] == False and session.get("username") != None %}
-                                    <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
-                                        <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
-                                    </form>
-                                {% endif %}
-
-                                <span style='font-size:15px;'>
-                                    {% if answer['acception'] == True %}
-                                        &#10004;Accepted by user
-                                    {% endif %}
-                                </span>
 
                         </tr>
                     {% endif %}
