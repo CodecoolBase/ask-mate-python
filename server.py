@@ -27,7 +27,7 @@ def route_list():
             order = 'submission_time'
             direction = 'desc'
         stored_questions = data_manager.get_latest5_questions(order, direction)
-    return render_template('list.html', questions=stored_questions, title="Welcome!")\
+    return render_template('list.html', questions=stored_questions, title="Welcome!")
 
 
 
@@ -36,13 +36,15 @@ def route_question_id(question_id):
     stored_questions = data_manager.get_questions()
     stored_answers = data_manager.get_answers()
     stored_comments = data_manager.get_comments()
+    user_id = data_manager.get_user_id_by_question_id(question_id)
 
     return render_template('questiondetails.html',
                            questions=stored_questions,
                            answers=stored_answers,
                            id=question_id,
                            comments=stored_comments,
-                           question_id=question_id)
+                           question_id=question_id,
+                           user_id=user_id)
 
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
@@ -261,7 +263,10 @@ def vote_down_answer(question_id, answer_id):
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html', error=None)
+        if session.get('username') is not None:
+            return redirect(url_for('loginerror'))
+        else:
+            return render_template('login.html', error=None)
     elif request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -282,7 +287,10 @@ def login():
 @app.route("/registration", methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html', error=None)
+        if session.get('username') is not None:
+            return redirect(url_for('loginerror'))
+        else:
+            return render_template('register.html', error=None)
     elif request.method == 'POST':
         username = request.form['username']
         if data_manager.check_username(username) == username:
@@ -293,7 +301,6 @@ def register():
             hashed_password = hashed_password.decode('utf-8')
             data_manager.registration(username, hashed_password)
             return redirect(url_for('route_main'))
-
 
 
 @app.route("/user/<int:user_id>/")
@@ -315,7 +322,7 @@ def profile_question(user_id,type):
             some_data = data_manager.get_questions()
         elif type == "answer":
             some_data = data_manager.get_answers_for_user()
-        elif type =="comment":
+        elif type == "comment":
             some_data = data_manager.get_comment_for_user()
         user_name = data_manager.get_user_name(user_id)
         return render_template('user_profile.html', datas=some_data, user_id=user_id, user_name=user_name)
@@ -342,6 +349,10 @@ def route_users():
     stored_users = data_manager.get_users()
     return render_template('users_list.html', users=stored_users, title="Welcome!")
 
+
+@app.route('/loginerror')
+def loginerror():
+    return render_template('loginerror.html')
 
 
 if __name__ == "__main__":
