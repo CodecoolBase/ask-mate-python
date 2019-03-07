@@ -91,16 +91,17 @@ def add_answer(cursor, question_id, message,user_id):
 
 
 @connection.connection_handler
-def add_comment(cursor, question_id, answer_id, message):
+def add_comment(cursor, question_id, answer_id, message,user_id):
         user_story = {
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'message': message,
             'answer_id': answer_id,
-            'question_id': question_id
+            'question_id': question_id,
+            'user_id': user_id
         }
 
-        cursor.execute("""INSERT INTO comment(submission_time, question_id, answer_id, message)
-                          VALUES(%(submission_time)s,%(question_id)s, %(answer_id)s, %(message)s);""", user_story)
+        cursor.execute("""INSERT INTO comment(submission_time, question_id, answer_id, message,user_id)
+                          VALUES(%(submission_time)s,%(question_id)s, %(answer_id)s, %(message)s,%(user_id)s);""", user_story)
 
 
 

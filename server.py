@@ -125,13 +125,12 @@ def add_question():
 def route_new_comment(question_id='', answer_id=''):
     if 'username' in session:
         if request.method == "POST":
+            user_id = data_manager.get_user_id_by_username(session['username'])
             if question_id == '':
-                print("answer comment")
-                data_manager.add_comment(str(data_manager.get_question_id(answer_id)), answer_id, request.form["comment"])
+                data_manager.add_comment(str(data_manager.get_question_id(answer_id)), answer_id, request.form["comment"],user_id)
                 return redirect(url_for('route_list'))
             elif answer_id == '':
-                print("question comment")
-                data_manager.add_comment(question_id,None, request.form["comment"])
+                data_manager.add_comment(question_id,None, request.form["comment"],user_id)
                 return redirect(url_for('route_list'))
 
         return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id, question_id=question_id)
