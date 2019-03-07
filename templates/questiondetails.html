@@ -126,7 +126,7 @@
                             </td>
                             <td>
                                 {% if answer['acception'] == False %}
-                                    {% if session["user_id"] == user_id["user_id"] %}
+                                    {% if session["user_id"] == user_id %}
                                         <form action="{{ url_for('accept_answer', question_id=id, answer_id=answer['id']) }}" method="post">
                                             <button type="submit" class="btn btn-primary mb-2">Accept this answer</button>
                                         </form>
