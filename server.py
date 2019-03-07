@@ -11,12 +11,12 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
 
 
-@app.route('/index')
+@app.route('/')
 def route_index():
     return render_template('index.html',  title="Welcome!")
 
 
-@app.route('/')
+@app.route('/list')
 def route_main():
     stored_questions = data_manager.get_questions()
     return render_template('list.html', questions=stored_questions, title="Welcome!")

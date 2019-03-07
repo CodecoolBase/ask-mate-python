@@ -73,6 +73,12 @@ h1 {
     opacity: .5;
 }
 
+.ellipse-container .team {
+    font-size: 18px;
+    text-align: center;
+    padding: 10px;
+}
+
 .ellipse-container .greeting:after {
     content: '';
     width: .3rem;
