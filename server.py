@@ -275,6 +275,13 @@ def profile_question(user_id,type):
         return redirect(url_for('route_main'))
 
 
+@app.route("/question/<int:question_id>/<int:answer_id>/accept-answer", methods=['GET', 'POST'])
+def accept_answer(question_id, answer_id):
+    if request.method == 'POST':
+        data_manager.accept_answer(question_id, answer_id)
+        return redirect(url_for('route_question_id', question_id=question_id))
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
