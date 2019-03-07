@@ -228,13 +228,26 @@ def registration(cursor, username, hashed_password):
 
 
 @connection.connection_handler
+def accept_answer(cursor, question_id, answer_id):
+
+    variables = {
+        'question_id': question_id,
+        'answer_id': answer_id
+    }
+
+    cursor.execute("""UPDATE answer
+                      SET acception = TRUE
+                      WHERE question_id = %(question_id)s AND id = %(answer_id)s;""", variables)
+
+@connection.connection_handler
 def get_user_name(cursor, user_id):
     cursor.execute("""
-                        SELECT * FROM users
-                        WHERE id=%(id)s LIMIT 1
+                      SELECT * FROM users
+                      WHERE id=%(id)s LIMIT 1
                        """,
                    {'id': user_id})
     return cursor.fetchone()['username']
+
 
 @connection.connection_handler
 def get_q_and_a_by_user(cursor):
@@ -286,7 +299,6 @@ def check_username(cursor, username):
 
 @connection.connection_handler
 def get_user_id_by_username(cursor, username):
-
     cursor.execute("""SELECT id FROM users WHERE username = %(username)s;""", {'username': username})
 
     user_id = cursor.fetchone()
