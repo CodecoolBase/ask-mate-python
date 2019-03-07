@@ -60,12 +60,12 @@ def delete_question(question_id):
     questions = data_manager.get_questions()
 
     for question in questions:
-        if get_user_id == question['user_id']:
+        if int(question['id']) == int(question_id) and int(question['user_id']) == int(get_user_id):
             if request.method == "POST":
                 data_manager.delete_question(question_id)
                 return redirect(url_for('route_list'))
-        else:
-            return redirect(url_for('route_main'))
+
+    return redirect(url_for('route_main'))
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
@@ -90,7 +90,7 @@ def edit_question(question_id):
     questions = data_manager.get_questions()
 
     for question in questions:
-        if get_user_id == question['user_id']:
+        if int(question['id']) == int(question_id) and int(question['user_id']) == int(get_user_id):
             if request.method == "POST":
                 new_message = request.form['message']
                 new_title = request.form['title']
@@ -98,8 +98,8 @@ def edit_question(question_id):
                 return redirect(f'/question/{question_id}')
 
             return render_template('edit_question.html', questions=questions, question_id=question_id)
-        else:
-            return redirect(url_for('route_main'))
+
+    return redirect(url_for('route_main'))
 
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
@@ -109,19 +109,18 @@ def edit_answer(answer_id):
     except KeyError:
         return redirect(url_for('route_main'))
     answers = data_manager.get_answers()
+    question_id = data_manager.get_question_id(answer_id)
 
     for answer in answers:
-        if get_user_id == answer['user_id']:
-            answers = data_manager.get_answers()
-            question_id = data_manager.get_question_id(answer_id)
+        if int(answer['id']) == int(answer_id) and int(answer['user_id']) == int(get_user_id):
             if request.method == "POST":
                 new_message = request.form['answer']
                 data_manager.get_update(answer_id, new_message)
                 return redirect(f'/question/{question_id}')
 
             return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
-        else:
-            return redirect(url_for('route_main'))
+
+    return redirect(url_for('route_main'))
 
 
 @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
@@ -133,12 +132,12 @@ def delete_answer(answer_id):
     answers = data_manager.get_answers()
 
     for answer in answers:
-        if get_user_id == answer['user_id']:
+        if int(answer['id']) == int(answer_id) and int(answer['user_id']) == int(get_user_id):
             if request.method == "POST":
                 data_manager.delete_answer(answer_id)
                 return redirect(url_for('route_list'))
-        else:
-            return redirect(url_for('route_main'))
+
+    return redirect(url_for('route_main'))
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -180,7 +179,7 @@ def edit_comment(comment_id):
     comments = data_manager.get_comments()
 
     for comment in comments:
-        if get_user_id == comment['user_id']:
+        if int(comment['id']) == int(comment_id) and int(comment['user_id']) == int(get_user_id):
             if request.method == "POST":
                 edit_counter = ''
                 for comment in comments:
@@ -196,8 +195,8 @@ def edit_comment(comment_id):
                     return redirect('/')
 
             return render_template('edit_comment.html', comment_id=comment_id, comments=comments)
-        else:
-            return redirect(url_for('route_main'))
+
+    return redirect(url_for('route_main'))
 
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
@@ -209,12 +208,12 @@ def delete_comment(comment_id):
     comments = data_manager.get_comments()
 
     for comment in comments:
-        if get_user_id == comment['user_id']:
+        if int(comment['id']) == int(comment_id) and int(comment['user_id']) == int(get_user_id):
             if request.method == "POST":
                 data_manager.delete_comments(comment_id)
                 return redirect(url_for('route_list'))
-        else:
-            return redirect(url_for('route_main'))
+
+    return redirect(url_for('route_main'))
 
 
 @app.route("/search")
