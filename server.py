@@ -47,12 +47,19 @@ def route_question_id(question_id):
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
 def delete_question(question_id):
-    if 'username' in session:
-        if request.method == "POST":
-            data_manager.delete_question(question_id)
-            return redirect(url_for('route_list'))
-    else:
-        return redirect(url_for('login'))
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+    questions = data_manager.get_questions()
+
+    for question in questions:
+        if get_user_id == question['user_id']:
+            if request.method == "POST":
+                data_manager.delete_question(question_id)
+                return redirect(url_for('route_list'))
+        else:
+            return redirect(url_for('login'))
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
