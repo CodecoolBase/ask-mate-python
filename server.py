@@ -170,25 +170,31 @@ def route_new_comment(question_id='', answer_id=''):
 
 @app.route('/comment/<int:comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(comment_id):
-    if 'username' in session:
-        comments = data_manager.get_comments()
-        if request.method == "POST":
-            edit_counter = ''
-            for comment in comments:
-                if comment['id'] == comment_id:
-                    edit_counter = comment['edited_count']
-            if edit_counter is None:
-                new_message = request.form['comment']
-                data_manager.get_update_for_comment(comment_id, new_message)
-                return redirect('/')
-            elif edit_counter is not None:
-                new_message = request.form['comment']
-                data_manager.get_new_update_for_comment(comment_id, new_message)
-                return redirect('/')
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+    comments = data_manager.get_comments()
 
-        return render_template('edit_comment.html', comment_id=comment_id, comments=comments)
-    else:
-        return redirect(url_for('login'))
+    for comment in comments:
+        if get_user_id == comment['user_id']:
+            if request.method == "POST":
+                edit_counter = ''
+                for comment in comments:
+                    if comment['id'] == comment_id:
+                        edit_counter = comment['edited_count']
+                if edit_counter is None:
+                    new_message = request.form['comment']
+                    data_manager.get_update_for_comment(comment_id, new_message)
+                    return redirect('/')
+                elif edit_counter is not None:
+                    new_message = request.form['comment']
+                    data_manager.get_new_update_for_comment(comment_id, new_message)
+                    return redirect('/')
+
+            return render_template('edit_comment.html', comment_id=comment_id, comments=comments)
+        else:
+            return redirect(url_for('login'))
 
 
 
