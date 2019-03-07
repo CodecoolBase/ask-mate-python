@@ -70,17 +70,23 @@ def route_new_answer(question_id):
 
 @app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
 def edit_question(question_id):
-    if 'username' in session:
-        questions = data_manager.get_questions()
-        if request.method == "POST":
-            new_message = request.form['message']
-            new_title = request.form['title']
-            data_manager.get_update_question(question_id, new_message, new_title)
-            return redirect(f'/question/{question_id}')
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+    questions = data_manager.get_questions()
 
-        return render_template('edit_question.html', questions=questions, question_id=question_id)
-    else:
-        return redirect(url_for('login'))
+    for question in questions:
+        if get_user_id == question['user_id']:
+            if request.method == "POST":
+                new_message = request.form['message']
+                new_title = request.form['title']
+                data_manager.get_update_question(question_id, new_message, new_title)
+                return redirect(f'/question/{question_id}')
+
+            return render_template('edit_question.html', questions=questions, question_id=question_id)
+        else:
+            return redirect(url_for('login'))
 
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
