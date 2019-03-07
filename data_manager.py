@@ -84,25 +84,16 @@ def add_answer(cursor, question_id, message):
 
 @connection.connection_handler
 def add_comment(cursor, question_id, answer_id, message):
-    if question_id == '':
         user_story = {
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'message': message,
-            'answer_id': answer_id
-        }
-
-        cursor.execute("""INSERT INTO comment(submission_time, answer_id, message)
-                          VALUES(%(submission_time)s, %(answer_id)s, %(message)s);""", user_story)
-
-    elif answer_id == '':
-        user_story = {
-            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'message': message,
+            'answer_id': answer_id,
             'question_id': question_id
         }
 
-        cursor.execute("""INSERT INTO comment(submission_time, question_id, message)
-                                  VALUES(%(submission_time)s, %(question_id)s, %(message)s);""", user_story)
+        cursor.execute("""INSERT INTO comment(submission_time, question_id, answer_id, message)
+                          VALUES(%(submission_time)s,%(question_id)s, %(answer_id)s, %(message)s);""", user_story)
+
 
 
 @connection.connection_handler
@@ -237,6 +228,39 @@ def registration(cursor, username, hashed_password):
 
 
 @connection.connection_handler
+def get_user_name(cursor, user_id):
+    cursor.execute("""
+                        SELECT * FROM users
+                        WHERE id=%(id)s LIMIT 1
+                       """,
+                   {'id': user_id})
+    return cursor.fetchone()['username']
+
+@connection.connection_handler
+def get_q_and_a_by_user(cursor):
+    cursor.execute("""SELECT question.title,question.message AS question_message,answer.message AS answer_message, 
+                      question.user_id
+                      FROM (question INNER JOIN answer ON question.id=answer.question_id);
+""")
+    datas = cursor.fetchall()
+    return datas
+
+@connection.connection_handler
+def get_answers_for_user(cursor):
+    cursor.execute("""SELECT submission_time,message AS title,user_id,question_id AS id FROM answer 
+    ORDER BY submission_time DESC;""")
+    answers = cursor.fetchall()
+    return answers\
+
+@connection.connection_handler
+def get_comment_for_user(cursor):
+    cursor.execute("""SELECT submission_time,message AS title,user_id,question_id AS id FROM comment 
+    ORDER BY submission_time DESC;""")
+    answers = cursor.fetchall()
+    return answers
+
+
+@connection.connection_handler
 def get_password_by_username(cursor, username):
 
     cursor.execute("""SELECT password FROM users
@@ -274,4 +298,5 @@ def get_users(cursor):
     cursor.execute("""SELECT username, registration_date FROM users ORDER BY registration_date;""")
     users = cursor.fetchall()
     return users
+
 

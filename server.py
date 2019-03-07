@@ -39,7 +39,8 @@ def route_question_id(question_id):
                            questions=stored_questions,
                            answers=stored_answers,
                            id=question_id,
-                           comments=stored_comments)
+                           comments=stored_comments,
+                           question_id=question_id)
 
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
@@ -103,10 +104,12 @@ def add_question():
 def route_new_comment(question_id='', answer_id=''):
     if request.method == "POST":
         if question_id == '':
-            data_manager.add_comment(question_id, answer_id, request.form["comment"])
+            print("answer comment")
+            data_manager.add_comment(str(data_manager.get_question_id(answer_id)), answer_id, request.form["comment"])
             return redirect(url_for('route_list'))
         elif answer_id == '':
-            data_manager.add_comment(question_id, answer_id, request.form["comment"])
+            print("question comment")
+            data_manager.add_comment(question_id,None, request.form["comment"])
             return redirect(url_for('route_list'))
 
     return render_template('newcomment.html', title="Add New Comment!", answer_id=answer_id, question_id=question_id)
@@ -219,6 +222,29 @@ def register():
             return redirect(url_for('route_main'))
 
 
+
+@app.route("/user/<int:user_id>/")
+def profile(user_id):
+    stored_questions = data_manager.get_questions()
+    user_name = data_manager.get_user_name(user_id)
+    return render_template('user_profile.html', questions=stored_questions, user_id=user_id,user_name=user_name)
+
+
+@app.route("/user/<int:user_id>/<type>")
+def profile_question(user_id,type):
+    if 'username' in session:
+        if type == "question":
+            some_data = data_manager.get_questions()
+        elif type == "answer":
+            some_data = data_manager.get_answers_for_user()
+        elif type =="comment":
+            some_data = data_manager.get_comment_for_user()
+        user_name = data_manager.get_user_name(user_id)
+        return render_template('user_profile.html', datas=some_data, user_id=user_id, user_name=user_name)
+    else:
+        return redirect(url_for('route_main'))
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
@@ -226,15 +252,11 @@ def logout():
     return redirect(url_for('route_main'))
 
 
-@app.route('/user/<int:user_id>')
-def profile(user_id):
-    pass
-
-
 @app.route('/users')
 def route_users():
     stored_users = data_manager.get_users()
     return render_template('users_list.html', users=stored_users, title="Welcome!")
+
 
 
 if __name__ == "__main__":
