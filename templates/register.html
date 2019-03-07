@@ -7,6 +7,9 @@
 
         <form class="form-login" action="" method="post">
             <h2>Sign Up</h2>
+            {% if error == "taken" %}
+                <h3>Username is already taken!</h3>
+            {% endif %}
             <div class="form-group">
                 <input type="text" class="form-control" name="username" aria-describedby="username" placeholder="Enter username">
             </div>
