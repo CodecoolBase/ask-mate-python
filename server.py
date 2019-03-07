@@ -100,12 +100,22 @@ def edit_answer(answer_id):
 
 @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
 def delete_answer(answer_id):
-    if 'username' in session:
-        if request.method == "POST":
-            data_manager.delete_answer(answer_id)
-            return redirect(url_for('route_list'))
-    else:
-        return redirect(url_for('login'))
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+    answers = data_manager.get_answers()
+
+    for answer in answers:
+        if get_user_id == answer['user_id']:
+            if request.method == "POST":
+                data_manager.delete_answer(answer_id)
+                return redirect(url_for('route_list'))
+        else:
+            return redirect(url_for('login'))
+
+
+
 
 
 @app.route("/add-question", methods=["GET", "POST"])
