@@ -13,13 +13,13 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
 
 @app.route('/')
 def route_main():
-    stored_questions = data_manager.get_questions()
+    stored_questions = data_manager.get_questions_fix()
     return render_template('list.html', questions=stored_questions, title="Welcome!")
 
 
 @app.route('/list', methods=['GET'])
 def route_list():
-    stored_questions = data_manager.get_questions()
+    stored_questions = data_manager.get_questions_fix()
     if request.method == "GET":
         order = request.args.get('order_by')
         direction = request.args.get('direction')
@@ -94,10 +94,13 @@ def delete_answer(answer_id):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question():
-    if request.method == "POST":
-        user_story_id = data_manager.add_question(request.form["question-title"], request.form["new-question"])
-        return redirect(url_for('route_question_id',  question_id=user_story_id))
-
+    if 'username' in session:
+        if request.method == "POST":
+            user_id=data_manager.get_user_id_by_username(session['username'])
+            user_story_id = data_manager.add_question(request.form["question-title"], request.form["new-question"],user_id)
+            return redirect(url_for('route_question_id',  question_id=user_story_id))
+    else:
+        return redirect(url_for('login'))
     return render_template("newquestion.html")
 
 

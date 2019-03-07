@@ -4,8 +4,14 @@ from datetime import datetime
 
 
 @connection.connection_handler
-def get_questions(cursor):
+def get_questions_fix(cursor):
     cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;""")
+    questions = cursor.fetchall()
+    return questions
+
+@connection.connection_handler
+def get_questions(cursor):
+    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC;""")
     questions = cursor.fetchall()
     return questions
 
@@ -45,19 +51,20 @@ def get_comments(cursor):
 
 
 @connection.connection_handler
-def add_question(cursor, title, message):
+def add_question(cursor, title, message,user_id):
     user_story = {
         'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'view_number': 0,
         'vote_number': 0,
         'title': title,
         'message': message,
+        'user_id':user_id,
         'image': ""
     }
 
-    cursor.execute("""INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
+    cursor.execute("""INSERT INTO question(submission_time, view_number, vote_number, title, message, image,user_id)
                       VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s,
-                      %(title)s, %(message)s, %(image)s);""",
+                      %(title)s, %(message)s, %(image)s,%(user_id)s);""",
                    user_story)
 
     cursor.execute("""SELECT id FROM question
