@@ -9,8 +9,6 @@ app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
-
-
 @app.route('/')
 def route_main():
     stored_questions = data_manager.get_questions()
