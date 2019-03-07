@@ -194,12 +194,19 @@ def edit_comment(comment_id):
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
 def delete_comment(comment_id):
-    if 'username' in session:
-        if request.method == "POST":
-            data_manager.delete_comments(comment_id)
-            return redirect(url_for('route_list'))
-    else:
-        return redirect(url_for('login'))
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+    comments = data_manager.get_comments()
+
+    for comment in comments:
+        if get_user_id == comment['user_id']:
+            if request.method == "POST":
+                data_manager.delete_comments(comment_id)
+                return redirect(url_for('route_list'))
+        else:
+            return redirect(url_for('login'))
 
 
 @app.route("/search")
