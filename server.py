@@ -59,7 +59,8 @@ def delete_question(question_id):
 def route_new_answer(question_id):
     if 'username' in session:
         if request.method == "POST":
-            data_manager.add_answer(question_id, request.form["answer"])
+            user_id = data_manager.get_user_id_by_username(session['username'])
+            data_manager.add_answer(question_id, request.form["answer"],user_id)
             return redirect(url_for('route_question_id', question_id=question_id))
 
         return render_template('answer.html', title="Add New Answer!", question_id=question_id)

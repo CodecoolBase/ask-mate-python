@@ -74,18 +74,19 @@ def add_question(cursor, title, message,user_id):
 
 
 @connection.connection_handler
-def add_answer(cursor, question_id, message):
+def add_answer(cursor, question_id, message,user_id):
 
     user_story = {
         'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'vote_number': 0,
         'question_id': question_id,
         'message': message,
+        'user_id': user_id,
         'image': ""
     }
 
-    cursor.execute("""INSERT INTO answer(submission_time, vote_number, question_id, message, image)
-                      VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s);""",
+    cursor.execute("""INSERT INTO answer(submission_time, vote_number, question_id, message, image,user_id)
+                      VALUES(%(submission_time)s,%(vote_number)s,%(question_id)s, %(message)s,%(image)s,%(user_id)s);""",
                    user_story)
 
 
