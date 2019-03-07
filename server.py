@@ -85,17 +85,24 @@ def edit_question(question_id):
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
 def edit_answer(answer_id):
-    if 'username' in session:
-        answers = data_manager.get_answers()
-        question_id = data_manager.get_question_id(answer_id)
-        if request.method == "POST":
-            new_message = request.form['answer']
-            data_manager.get_update(answer_id, new_message)
-            return redirect(f'/question/{question_id}')
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+    answers = data_manager.get_answers()
 
-        return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
-    else:
-        return redirect(url_for('login'))
+    for answer in answers:
+        if get_user_id == answer['user_id']:
+            answers = data_manager.get_answers()
+            question_id = data_manager.get_question_id(answer_id)
+            if request.method == "POST":
+                new_message = request.form['answer']
+                data_manager.get_update(answer_id, new_message)
+                return redirect(f'/question/{question_id}')
+
+            return render_template('edit_answer.html', answer_id=answer_id, answers=answers)
+        else:
+            return redirect(url_for('login'))
 
 
 @app.route('/answer/<answer_id>/delete', methods=['GET', 'POST'])
