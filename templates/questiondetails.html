@@ -77,7 +77,7 @@
         {% for question in questions %}
             {% if id == question['id'] %}
 
-                <h4 class="mt-4 text-md-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Question Comments</h4>
+                <h4 class="mt-4 text-md-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px; padding-top: 50px;">Question Comments</h4>
                 <hr>
 
                 <div class="col-md-10 text-left">
@@ -103,7 +103,7 @@
 
         <!------------------------------------------- ANSWER DETAILS ------------------------------------------>
         <div class="text-right">
-            <h2 class="mt-4 text-xl-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Answers</h2>
+            <h2 class="mt-4 text-xl-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px; padding-top: 50px;">Answers</h2>
             <a href="/question/{{ id }}/new-answer" class="btn btn-primary mb-2"><i class="fas fa-plus-circle"> Answer</i></a>
         </div>
         <table class="table table-bordered table-hover table-ligth">
@@ -151,7 +151,7 @@
 
         <!------------------------------------------ ANSWER COMMENTS ------------------------------------------->
 
-        <h4 class="mt-4 text-md-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px;">Answer Comments</h4>
+        <h4 class="mt-4 text-md-left" style="font-family: 'Fredericka the Great', Tahoma, sans-serif; letter-spacing: 2px; word-spacing: 5px; padding-top: 50px;">Answer Comments</h4>
         <hr>
 
         {% for answer in answers %}
