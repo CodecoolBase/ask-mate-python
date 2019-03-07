@@ -262,7 +262,12 @@ def profile(user_id):
 
 @app.route("/user/<int:user_id>/<type>")
 def profile_question(user_id,type):
-    if 'username' in session:
+    try:
+        get_user_id = data_manager.get_user_id_by_username(session['username'])
+    except KeyError:
+        return redirect(url_for('route_main'))
+
+    if get_user_id == user_id:
         if type == "question":
             some_data = data_manager.get_questions()
         elif type == "answer":
