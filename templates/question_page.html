@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> {{ question['title'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+{% if session['verify'] == True %}
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+{%  else %}
+<div id="login" class="login">{%  include 'login.html' %}</div>
+{% endif %}
+<div id="Home_button">{% include 'home_button.html' %}</div>
+<br>
+
+<h1>{{ question[0]['title'] }}</h1>
+<div id="data">
+ID :{{ question[0]['id'] }}<br>
+Submission Time: {{ question[0]['submission_time'] }}<br>
+View Number: {{ question[0]['view_number'] }}<br>
+Vote Number: {{ question[0]['vote_number'] }}<br>
+</div>
+
+<div id="main_data">
+Message: <p>{{ question[0]['message'] }}</p><br>
+Image: <img src="{{ question[0]['image'] }}" alt="" height="100" width="150"><br>
+</div>
+
+<form action="/question_page/{{ question['id'] }}/edit" method="POST">
+    <button><a href="{{ url_for('edit_question', question_id=question[0]['id']) }}">edit question</a></button>
+</form>
+
+<button><a href="{{ url_for('delete_question',question_id = question[0]['id']) }}"> Delete question</a></button> <br>
+
+<h2>Comments:</h2>
+{% for message in comment %}
+   <div id="question_comment"> {{ message['message'] }} </div> <br>
+{% endfor %}
+
+<button><a href="{{ url_for('add_comment_to_question', question_id = question[0]['id'] ) }}">Add Comment</a></button>
+
+<form action="/question_page/vote_question" method="post">
+    <input type="hidden" name="q_id" value="{{ question[0]['id'] }}">
+    <input type="hidden" name="vote_num" value="{{ question[0]['vote_number'] }}">
+    <input type="radio" name="vote_up" value="up"> Vote Up Question<br>
+    <input type="radio" name="vote_down" value="down"> Vote Down Question<br>
+    <input type="submit" value="VOTE">
+</form>
+
+<h2>Answers:</h2>
+{% for answer in answers %}
+    <div id ="answer">{{ answer['message'] }}</div><br>
+    <img src="{{ answer['image'] }}" alt="" height="100" width="150">
+    <p>Vote Number: {{ answer['vote_number'] }}</p>
+    <form action="/question_page/vote_answer" method="post">
+        <input type="hidden" name="question_id" value="{{ question[0]['id'] }}">
+        <input type="hidden" name="a_id" value="{{ answer['id'] }}">
+        <input type="hidden" name="vote_num" value="{{ answer['vote_number'] }}">
+        <input type="radio" name="vote_up" value="up"> Vote Up Answer<br>
+        <input type="radio" name="vote_down" value="down"> Vote Down Answer<br>
+        <input type="submit" value="VOTE">
+    </form>
+    {% if answer['accepted'] == True %}
+        <p class="accepted_answer">accepted</p>
+    {% else %}
+        <form action="{{ url_for('accept_answer') }}" method="POST">
+        <input type="hidden" name="q_id" value="{{question[0]['id']}}">
+        <input type="hidden" name="a_id" value="{{ answer['id'] }}">
+        <input type="submit" value="accept answer">
+        </form>
+    {% endif %}
+    comments:<br>
+    {% for comment in answer_comment %}
+        {% if comment['answer_id'] == answer['id'] %}
+            <div id="ansver_comment">{{ comment['message'] }}</div> <br>
+        {% endif %}
+    {% endfor %}
+    <form action="/question_page/{{ answer['id'] }}/update">
+        <button><a href="{{ url_for('add_comment_to_answer', answer_id = answer['id'], question_id = question[0]['id'] ) }}">Add
+            Comment:</a></button>
+        <a href="{{ url_for('edit_answer', answer_id=answer['id'], class="button") }}"><button>edit answer</button></a>
+    </form>
+    <button><a href="{{ url_for('delete_answer', question_id=question[0]['id'], answer_id=answer['id']) }}"> delete answer</a></button>
+    <br><br>
+{% endfor %}
+<form action="/question_page/{{ question['id'] }}/new-answer" method="POST">
+    <button><a href="{{ url_for('post_an_answer',question_id=question[0]['id'], class="button") }}">Post an Answer</a></button>
+</form>
+</body>
+</html>

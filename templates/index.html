@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+{% if session['verify'] == True %}
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+{%  else %}
+<div id="login" class="login">{%  include 'login.html' %}</div>
+{% endif %}
+<div id="Home_button">{% include 'home_button.html' %}</div>
+<div id="search"></div>
+<h1>ASK MATE</h1>
+{% if user_id != '' %}
+<a href="{{ url_for('show_user_page', user_id = user_id)}}" class="button">User Page</a>
+   {% endif %}
+<a href="{{ url_for('list_all_user')}} " class="button">All User</a>
+{% if user_id != '' %}
+    <a href="/add-question" class="button">Add new Question</a>
+{% else %}
+<a class="defaultbutton" >Add new Question</a>
+{% endif %}
+<a href="/all_question" class="button">Show All Question</a>
+<h2>LATEST 5 QUESTION:</h2>
+<table>
+<thead>
+<th>Title</th>
+<th>Submission Time</th>
+<th>View Number</th>
+<th>Vote Number</th>
+</thead>
+    <tbody>
+    {% for question in questions %}
+        <tr>
+        <td><a href=" {{ url_for('show_question', question_id=question['id']) }}">
+            {{ question['title'] }} </a></td>
+        <td>{{ question['submission_time'] }}</td>
+        <td>{{ question['view_number'] }}</td>
+        <td>{{ question['vote_number'] }}</td>
+    {% endfor %}
+    </tr>
+
+    </tbody>
+</table>
+<br>
+</body>
+</html>

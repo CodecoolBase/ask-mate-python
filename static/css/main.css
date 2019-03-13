@@ -1,0 +1,123 @@
+body {
+    background-image: url("background.jpg");
+    color:black;
+    }
+
+#main_data {
+    background-color: rgb(232,232,232,0.2);
+    width: 400px;
+    position: center;
+}
+
+#data{
+    position: relative;
+    margin-right: fill;
+    float: right;
+    width: 400px;
+    backrgb(232,232,232)ground-color: lightgray;
+}
+
+#answer{
+    width: 400px;
+    position: center;
+    float: bottom;
+    background-color: rgb(232,232,232,0.2);
+    border-radius: 5px;
+}
+
+#question_comment{
+    width: 400px;
+    background-color: rgb(232,232,232,0.2) ;
+    color: black;
+    font-max-size: small;
+}
+
+#answer_comment{
+    width: 400px;
+    background-color: rgb(232,232,232,0.2);
+    color: black;
+    font-max-size: small;
+}
+.accepted_answer{
+    background-color: #c38005;
+    width: 80px;
+}
+
+.button {
+    background-color: #555555;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    border-radius: 4px;
+
+}
+
+.defaultbutton{
+    background-color: #040404;
+    border: none;
+    color: rgba(87, 87, 87, 0.71);
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    border-radius: 4px;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+    letter-spacing: 3px;
+    word-spacing: 8px;
+    text-shadow: 3px 2px gray;
+    }
+
+h2 {
+    color: black;
+    text-shadow: 3px 2px gray;
+}
+
+thead {
+        color: black;
+    text-shadow: 3px 2px gray;
+}
+
+#title_Color {
+    color: black;
+    text-shadow: 3px 2px gray;
+}
+
+p.thicker {
+  font-weight: 900;
+}
+
+
+textarea{
+    background-color: darkkhaki;
+    border-radius: 5px;
+}
+
+.login{
+    position: absolute;
+    right: 10px;
+}
+
+.logout{
+    position: absolute;
+    right: 10px;
+}
+
+table, th, td{
+    padding: 15px;
+    text-align: left;
+}
+
+th, td{
+    border-bottom: 1px solid #000000;
+}
+
+

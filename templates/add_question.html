@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Question</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+{% if session['verify'] == True %}
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+{%  else %}
+<div id="login" class="login">{%  include 'login.html' %}</div>
+{% endif %}
+<div id="Home_button">{% include 'home_button.html' %}</div>
+{% if result == [] %}
+<h1>Add New Question</h1>
+<form actions="/add-question" method="post">
+    Question Name: <br>
+    <input type="text" name="title"><br>
+    <p></p>
+    Question:
+    <br>
+    <textarea type="text" rows="10" cols="40" name="message"></textarea><br>
+    <p></p>
+    Image:
+    <br>
+    <textarea type="text" rows="1" cols="40" name="image" placeholder="url"></textarea>
+    <p></p>
+    <br>
+    <input type="submit">
+</form>
+{% else %}
+<h1>Edit Question</h1>
+<form action="/rewrite_question" method="post">
+    Question Name: <br>
+    <textarea type="text" rows="1" cols="40" name="title" >{{result[0]['title']}}</textarea><br>
+    Question: <br>
+    <textarea type="text" rows="10" cols="40" name="message">{{result[0]['message']}}</textarea><br>
+    <br>
+    <input type="hidden" name="id" value="{{ result[0]['id'] }}">
+    <input type="hidden" name="submission_time" value="{{ result[0]['submission_time'] }}">
+    <input type="hidden" name="view_number" value="{{ result[0]['view_number'] }}">
+    <input type="hidden" name="vote_number" value="{{ result[0]['vote_number'] }}">
+    <input type="hidden" name="image" value="{{ result[0]['image'] }}">
+
+        <input type="submit">
+    {% endif %}
+</form>
+</body>
+</html>

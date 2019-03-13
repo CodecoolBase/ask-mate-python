@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<div id="login">
+    <a class="login_message">{{ session['login_message'] }}</a>
+    <form class="sigin" action="{{ url_for('registration')}}">
+        <input type="submit" value="Signin">
+    </form>
+    <form action="/login" method="POST">
+        <input class="user_name" placeholder="username" name="username">
+        <input class="password" placeholder="password" name="password" type="password">
+        <input type="submit" value="Login">
+    </form>
+</div>
+</body>
+</html>

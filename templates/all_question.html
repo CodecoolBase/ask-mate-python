@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Question</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+{% if session['verify'] == True %}
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+{%  else %}
+<div id="login" class="login">{%  include 'login.html' %}</div>
+{% endif %}
+{% include 'home_button.html' %}
+<h1>ALL QUESTION</h1>
+<form action="/all_question/sort" method="post">
+    Sort by:
+<select id="qusetions" name="options">
+      <option value="vote_number">Vote</option>
+      <option value="submission_time">Date</option>
+      <option value="view_number">View</option>
+</select>
+<select id="sort" name="sort_options">
+      <option value="ASC">ASC</option>
+      <option value="DESC">DESC</option>
+</select>
+    <input type="submit" value="sort">
+</form>
+<p></p>
+<p></p>
+<table>
+    <tbody>
+    {% for question in questions%}
+    <tr>
+        <td><a href=" {{ url_for('show_question', question_id=question['id']) }}">
+            {{question['title']}}</a></td>
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

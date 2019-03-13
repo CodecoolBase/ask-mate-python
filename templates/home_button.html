@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+          font-family: Arial;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        form.example input[type=text] {
+          padding: 5px;
+          font-size: 17px;
+          border: 1px solid grey;
+          float: right;
+          width: 20%;
+          background: #f1f1f1;
+        }
+
+        form.example button {
+          float: right;
+          width: 10%;
+          padding: 5px;
+          background: #555555;
+          color: white;
+          font-size: 17px;
+          border: 1px solid grey;
+          border-left: none;
+          cursor: pointer;
+            text-align: center;
+        }
+
+        form.example button:hover {
+          background: #0b7dda;
+        }
+
+        form.example::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+    </style>
+</head>
+<body>
+<div class="button">
+<a href="{{ url_for('render_index') }}" class="button"> Home</a>
+</div>
+<br><br>
+<form  class="example" action="/search" method='POST'>
+    <input type="text" name="question_data" value="" required>
+    <button type="submit">Search</button>
+</form>
+</body>
+</html>

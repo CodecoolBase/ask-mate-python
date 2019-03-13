@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> ADD COMMENT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+{% if session['verify'] == True %}
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+{%  else %}
+<div id="login" class="login">{%  include 'login.html' %}</div>
+{% endif %}
+<h1> Add Comment</h1>
+{% if comment == 'question' %}
+    <form action="{{ url_for('add_comment_to_question', question_id=question_id)}}" method="post">
+        Comment: <br>
+        <textarea type="text" rows="10" cols="40" name="message"></textarea><br>
+        <input type="hidden" value="{{ question_id }}">
+        <input type="submit" value="Add Comment">
+{% elif comment == 'answer' %}
+    <form action="{{ url_for('add_comment_to_answer', answer_id=answer_id, question_id=question_id)}}" method="post">
+        Comment: <br>
+        <textarea type="text" rows="10" cols="40" name="message"></textarea><br>
+        <input type="hidden" value="{{ question_id }}">
+        <input type="hidden" value="{{ answer_id }}">
+        <input type="submit" value="Add Comment">
+{%  endif %}
+</form>
+</body>
+</html>

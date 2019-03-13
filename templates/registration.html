@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<h1>registration</h1>
+<form action="{{ url_for('registration')}}" method="post">
+    <input name="user_name" required minlength="3" maxlength="15" placeholder="User Name" value="">
+    <br>
+    <input name="password" required minlength="8" placeholder="Password" type="password" value="">
+    <input type="submit" value="registration">
+</form>
+</body>
+</html>

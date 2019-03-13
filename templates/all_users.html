@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+{% if session['verify'] == True %}
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+{%  else %}
+<div id="login" class="login">{%  include 'login.html' %}</div>
+{% endif %}
+<div id="Home_button">{% include 'home_button.html' %}</div>
+<h1>All User</h1>
+<table class="all_users">
+    <thead>
+    <th>ID</th>
+    <th>User Name</th>
+    <th>Reputation</th>
+    <th>Submission Time</th>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user['id'] }}</td>
+        <td>{{ user['user_name'] }}</td>
+        <td>{{ user['reputation'] }}</td>
+        <td>{{ user['submission_time']}}</td><br>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<div id="logout" class="logout">{% include 'logout.html' %}</div>
+<div id="Home_button">{% include 'home_button.html' %}</div>
+<h1> {{ user_data['user_name'] }}</h1>
+Reputation: {{ user_data['reputation'] }}
+<br>
+ID: {{ user_data['id'] }}
+<div class="user_questions">
+    <h2>QUESTIONS:</h2>
+    <table>
+        <thead>
+        <th>Title</th>
+        <th>Message</th>
+        <th>View Number</th>
+        <th>Vote Number</th>
+        </thead>
+        <tbody>
+        {% for question in questions %}
+        <tr>
+            <td><a href="{{ url_for('show_question', question_id=question['id']) }}"> {{ question['title'] }}</a></td>
+            <td>{{ question['message'] }}</td>
+            <td>{{ question['view_number'] }}</td>
+            <td>{{ question['vote_number'] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="user_answers">
+    <h2>ANSWERS:</h2>
+    <table>
+        <thead>
+        <th>Question</th>
+        <th>Answer</th>
+        <th>Vote Number</th>
+        </thead>
+        <tbody>
+        {% for answer in answers%}
+        <tr>
+            <td><a href="{{ url_for('show_question', question_id=answer['question_id']) }}">{{ answer['question_title'] }}</a></td>
+            <td> {{ answer['message'] }}</td>
+            <td>{{ answer['vote_number'] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="user_comments">
+    <h2>Comments:</h2>
+    <table>
+        <thead>
+        <th>Question</th>
+        <th>Answer</th>
+        <th>Comment</th>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+        <tr>
+        {% if comment['question'] != None %}
+            <td><a href="{{ url_for('show_question', question_id=comment['q_id']) }}">{{comment['question']}}</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+        {% if comment['answer'] != None %}
+            <td><a href="{{ url_for('show_question', question_id=comment['question_id']) }}">{{comment['answer']}}</a></td>
+        {% else %}
+            <td></td>
+        {% endif %}
+            <td>{{comment['comment']}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
