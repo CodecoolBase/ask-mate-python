@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block contents %}
+<div class="jumbotron-fluid mt-2">
+    <div class="card card-image" style="background-image: url(https://mdbootstrap.com/img/Photos/Others/gradient1.jpg);">
+        <div class="text-white text-center py-5 px-4 my-5">
+            <div>
+            <h1 class="display-2"><strong>Welcome to AskMate!</strong></h1>
+            <p class="mx-5 mb-5 display-4">Ask questions - get answers! On whatever topic!</p>
+            <button class="btn btn-primary btn-lg" role="button" aria-pressed="true"><a href="/add" class="text-light">Ask Question</a></button>    
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <h2 class="display-5">Latest questions:</h2>
+    <div class="mt-2">
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th><div class="pb">No.</div></th>
+                    <th><div class="d-block pb">Title</div></th>
+                    <th><div class="d-block pb">User</div></th>
+                    <th><div class="d-block pb">Message</div></th>
+                    <th><div class="d-block pb">Submission Time</div></th>
+                    <th><div class="pb">View Number</div></th>
+                    <th><div class="pb">Vote Number</div></th>
+                    <th><div class="pb">Image</div></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions  %}
+                <tr>
+                    <td>{{ loop.index }} </td>
+                    <td><a href="question_detail/{{ question['id'] }}">{{ question['title'] }} </a></td>
+                    {%  if question['users_id'] %}
+                        <td><a href="/user/{{ question['users_id'] }}">{{ question['username'] }} </a></td>
+                    {% else %}
+                        <td>{{ question['username'] }} </td>
+                    {% endif %}
+                    <td>{{ truncate_fn(question['message'], 'home') }} </td>
+                    <td>{{ question['submission_time'] }} </td>
+                    <td>{{ question['view_number'] }} </td>
+                    <td>{{ question['vote_number'] }} </td>
+                    {% if question['image'] %}
+                        <td class="user-image__wrapper-list"><img src="/static/{{ question['image'] }}" alt="Example image" class="img-thumbnail user-image__image"></td>
+                    {% else %}
+                        <td class="user-image__wrapper-list"><img src="http://placehold.it/80" alt="Example image" class="img-thumbnail user-image__image"></td>
+                    {% endif %}
+                    <td><a href="/question/{{ question['id'] }}/delete"><i class="fas fa-trash text-danger"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="container">
+            <div class="pt-3 float-right">
+                <a href="/list"><button class="btn btn-primary">Show more..</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
