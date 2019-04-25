@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block contents %}
+
+    <div class="container mt-5">
+    <div class="list-group">
+        <div class="list-group-item bg-info text-white">
+            <i class="fas fa-comment mr-2 text-white"></i>Search results
+            <span class="badge badge-light float-right">{{ questions_count }}</span>
+        </div>
+        {% for question in searched_questions %}
+
+        <div class="card list-group-item mb-3">
+            <div class="container">
+                <div>
+                    <h5 class="card-title"><a href="question_detail/{{ question['id'] }}">Q: {{ markup(highlight_search_term_fn(question['title'])) }}</a></h5>
+                    <p class="lead">{{ markup(highlight_search_term_fn(question['message'])) }}</p>
+                    <small class="text-muted d-block mt-5">
+                        Posted on: {{ question['submission_time'] }}
+                    </small>
+                    <div class="mt-2">
+                        Votes: {{ question['vote_number'] }}
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <p class="card-title"><b>Answers:</b></p>
+                        <hr>
+                        <ul class="answer_list">
+                            {% for answer in searched_answers %}
+                                {% if answer['question_id'] == question['id']%}
+                                    <li class="py-3 border-bottom mb-3">
+                                        <p>{{ markup(highlight_search_term_fn(answer['message'])) }}</p>
+                                        <div class="answer_list_item_meta">
+                                            <small class="text-muted">
+                                                Posted on: {{ answer['submission_time'] }}
+                                            </small>
+                                            <small class="text-muted">
+                                                Votes: {{ answer['vote_number'] }}
+                                            </small>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

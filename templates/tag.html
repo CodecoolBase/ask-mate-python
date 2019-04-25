@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block contents %}
+{% if tags %}
+<div class="mt-5">
+    <div class="container col-3">
+        <table class="table table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th>
+                    <div class="pb-1">No.</div>
+                </th>
+                <th>
+                    <div class="pb-1">Tag name</div>
+                </th>
+                <th>
+                    <div class="pb-1">Number of times used</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tag in tags %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ tag['name'] }}</td>
+                <td>{{ tag['used'] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ url_for('route_add_tag', question_id=question_id) }}" method="POST">
+                        <div>
+                            <div class="card-title">
+                                <h3>Assign tag</h3>
+                            </div>
+                        </div>
+                        {% for option in options %}
+                        <div class="pb-2 form-check">
+                            <input class="form-check-input" id="tag-{{ loop.index }}" type="checkbox"
+                                   name="{{ option['id'] }}">
+                            <label for="tag-{{ loop.index }}" class="form-check-label">{{ option['name'] }}</label>
+                        </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <label for="other">Other:</label>
+                            <input type="text" id="other" name="new_tag" class="form-control">
+                        </div>
+                        {#
+                        <div class="pb-2">#}
+                            {# <input class="mr-2" type="radio" name="tag" value="other">Other<br>#}
+                            {#
+                        </div>
+                        #}
+                        {#
+                        <div class="pb-2">#}
+                            {# <input class="mr-2" type="text" name="other">#}
+                            {#
+                        </div>
+                        #}
+                        <button type="submit" class="btn btn-primary mb-2">Assign</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
