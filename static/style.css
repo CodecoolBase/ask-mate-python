@@ -1,0 +1,41 @@
+.answer_list {
+    list-style: none;
+}
+
+.file-input {
+    display: flex;
+}
+
+.file-input__wrapper {
+    flex: 1;
+}
+
+.file-input__submit {
+    border: none;
+}
+
+.user-image__wrapper-question {
+    width: 150px;
+    height: 150px;
+}
+
+.user-image__wrapper-answer {
+    width: 100px;
+    height: 100px;
+}
+
+.user-image__wrapper-list {
+    width: 100px;
+    height: 100px;
+}
+
+.user-image__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.thumb-icon {
+    cursor: pointer;
+}

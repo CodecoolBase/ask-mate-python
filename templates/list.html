@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block contents %}
+    <div class="mt-5">
+        <a href={{ url_for('route_add_question') }}><button type="button" class="btn btn-primary btn-lg mb-3" role="button">Ask Question</button></a>
+        <div class="container-fluid">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th><div class="pb-5">No.</div></th>
+                        <th><div class="d-block pb-4">Title</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.title', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.title', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="d-block pb-4">User</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='users.username', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='users.username', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="d-block pb-4">Message</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.message', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.message', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="d-block pb-4">Submission Time</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.submission_time', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.submission_time', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="pb-4">View Number</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.view_number', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.view_number', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="pb-4">Vote Number</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.vote_number', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='question.view_number', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="pb-5">Image</div></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for question in questions  %}
+                    <tr>
+                        <td>{{ loop.index }} </td>
+                        <td><a href="question_detail/{{ question['id'] }}">{{ question['title'] }} </a></td>
+                        {%  if question['users_id'] %}
+                            <td><a href="/user/{{ question['users_id'] }}">{{ question['username'] }} </a></td>
+                        {% else %}
+                            <td>{{ question['username'] }} </td>
+                        {% endif %}
+                        <td>{{ truncate_fn(question['message'], 'list') }} </td>
+                        <td>{{ question['submission_time'] }} </td>
+                        <td>{{ question['view_number'] }} </td>
+                        <td>{{ question['vote_number'] }} </td>
+                        {% if question['image'] %}
+                            <td class="user-image__wrapper-list"><img src="/static/{{ question['image'] }}" alt="Example image" class="img-thumbnail user-image__image"></td>
+                        {% else %}
+                            <td class="user-image__wrapper-list"><img src="http://placehold.it/80" alt="Example image" class="img-thumbnail user-image__image"></td>
+                        {% endif %}
+                        <td><a href="/question/{{ question['id'] }}/delete"><i class="fas fa-trash text-danger"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

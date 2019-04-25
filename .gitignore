@@ -102,3 +102,12 @@ ENV/
 
 # pycharm files
 .idea/
+
+# vscode files
+settings.json
+
+# database files
+data/
+
+# static files
+static/images/

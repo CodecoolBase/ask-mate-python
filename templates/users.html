@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{#{% block menu %}#}
+{#    <li><a href="/users_list" class="text-white">Users</a></li>#}
+{#{% endblock menu %}#}
+{% block contents %}
+    <div class="mt-5">
+         <div class="container-fluid">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th><div class="pb-5">No.</div></th>
+                        <th><div class="d-block pb-4">Id</div>
+                            <a href="{{ url_for('route_sort_users', order_by='id', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_users', order_by='id', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="d-block pb-4">Username</div>
+                            <a href="{{ url_for('route_sort_users', order_by='username', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_users', order_by='username', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="d-block pb-4">Email</div>
+                            <a href="{{ url_for('route_sort_users', order_by='email', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_users', order_by='email', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="pb-4">Full name</div>
+                            <a href="{{ url_for('route_sort_questions', order_by='full_name', order_direction='asc') }}"><i class="fas fa-chevron-up"></i>
+                            <a href="{{ url_for('route_sort_questions', order_by='full_name', order_direction='desc') }}"><i class="fas fa-chevron-down"></i></a>
+                        </th>
+                        <th><div class="pb-4">Password</div>
+                        </th>
+                        <th><div class="pb-5">Reputation</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users  %}
+                    <tr>
+                        <td>{{ loop.index }} </td>
+                        <td>{{ user['id'] }} </td>
+                        <td>{{ user['username'] }} </td>
+                        <td>{{ user['email'] }} </td>
+                        <td>{{ user['full_name'] }} </td>
+                        <td>{{ user['password'] }} </td>
+                        <td>{{ user['reputation'] }} </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

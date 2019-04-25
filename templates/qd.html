@@ -1,0 +1,210 @@
+{% extends "layout.html" %}
+{% block contents %}
+<div class="container mt-5 mb-4">
+    <div class="card">
+        <h1 class="card-header display-5">{{ question['title'] }}</h1>
+        <div class="card-body">
+            <div class="container mb-4">
+                <div class="row">
+                    <div class="col-md-10">
+                        <p class="lead">{{ question['message'] }}</p>
+                    </div>
+                    <div class="col-md-2 user-image">
+                        <div class="user-image__wrapper-question">
+                            {% if question['image'] %}
+                                <img src="{{ url_for('static', filename=question['image']) }}" alt="User image" class="img-thumbnail user-image__image">
+                            {% else %}
+                                <img src="http://placehold.it/80" alt="Example image" class="img-thumbnail user-image__image">
+                            {% endif %}
+                        </div>
+                        <form class="md-form" method=POST enctype=multipart/form-data action='{{ url_for('upload', question_id=question['id']) }}'>
+                          <div class="file-field file-input">
+                              <div class="file-path-wrapper file-input__wrapper">
+                                  <input class="text-small" type="text" placeholder="Add image">
+                                    <input type="file" name="photo">
+                                </div>
+                            <button class="btn-floating btn-sm blue-gradient mt-0 file-input__submit" type="submit">
+                              <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+            <small class="text-muted d-block">
+                Posted on: {{ question['submission_time'] }}
+            </small>
+            <small class="text-muted d-block">
+                Posted by:
+                {%-  if question['users_id'] -%}
+                    <td><a href="/user/{{ question['users_id'] }}"> {{ question['username'] }} </a></td>
+                {% else %}
+                    <td> {{ question['username'] }} </td>
+                {% endif %}
+            </small>
+            <small class="text-muted d-block">
+                Viewed: {{ question['view_number'] }} times
+            </small>
+            <div class="mt-4">
+                {% for tag in tags %}
+                    <span class="badge badge-pill badge-primary">
+                        {{ tag['name'] }}
+                        <a href="/question_detail/{{ question['id'] }}/tag/{{ tag['id'] }}/delete"><i class="fas fa-times text-white"></i></a>
+                    </span>
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('route_new_answer', question_id=question['id']) }}" class="btn btn-outline-primary btn-sm">Answer question</a>
+                <a href="{{ url_for('route_question_edit', question_id=question['id']) }}" class="btn btn-outline-primary btn-sm">Edit question</a>
+                <a href="{{ url_for('route_add_tag', question_id=question['id']) }}" class="btn btn-outline-primary btn-sm">Add tag</a>
+                <a href="/question/{{ id }}/delete" class="btn btn-outline-danger btn-sm">Delete question</a>
+                <div class="float-right mr-5 pt-3 align-bottom">
+                    <i class="fas fa-thumbs-up mr-2 text-primary thumb-icon" onclick="questionVoteUp({{ question['id'] }})"></i>
+                    <i class="fas fa-thumbs-down mr-2 text-danger thumb-icon" onclick="questionVoteDown({{ question['id'] }})"></i>
+                    Votes: <span id="question-vote-{{ question['id'] }}">{{ question['vote_number'] }}</span>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <p class="card-title"><b>Comments:</b></p>
+                        <hr>
+                        <ul class="answer_list">
+                            {% for comment in question_comments %}
+                                <li class="py-3 border-bottom mb-3">
+                                    <p>{{ comment['message'] }}</p>
+                                    <div>
+                                        <small class="text-muted mr-2">
+                                            Posted on: {{ comment['submission_time'] }}
+                                        </small>
+                                        <small class="text-muted d-block">
+                                            Posted by:
+                                            {%-  if comment['users_id'] -%}
+                                                <td><a href="/user/{{ comment['users_id'] }}"> {{ comment['username'] }} </a></td>
+                                            {% else %}
+                                                <td> {{ comment['username'] }} </td>
+                                            {% endif %}
+                                        </small>
+                                        {% if comment['edited_count'] > 0  %}
+                                            <small class="text-muted">
+                                                Edited {{ comment['edited_count'] }} times
+                                            </small>
+                                        {% endif %}
+                                        <div>
+                                            <a href="{{ url_for('route_edit_comment', comment_id=comment['id']) }}" class="mr-2"><i class="fas fa-edit text-muted"></i></a>
+                                            <a href="{{ url_for('route_delete_comment', comment_id=comment['id'], question_id=question['id']) }}"><i class="fas fa-trash text-muted"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <a href="{{ url_for('route_add_comment_to_question', question_id=question['id']) }}" class="btn btn-sm btn-primary">Add comment</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="list-group">
+        <div class="list-group-item bg-info text-white">
+            <i class="fas fa-comment mr-2 text-white"></i>Answers
+            <span class="badge badge-light float-right">{{ count }}</span>
+        </div>
+        {% for answer in answers %}
+
+        <div class="card list-group-item mb-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1" style="padding:0;">
+                        <div class="user-image__wrapper-answer">
+                            {% if answer['image'] %}
+                                <img src="/static/{{ answer['image'] }}" alt="User image" class="img-thumbnail user-image__image" >
+                            {% else %}
+                                <img src="http://placehold.it/80" alt="Example image" class="img-thumbnail user-image__image">
+                            {% endif %}
+                        </div>
+                        <form class="md-form" method=POST enctype=multipart/form-data action='/upload?question_id={{ question["id"] }}&answer_id={{ answer["id"] }}'>
+                          <div class="file-field">
+                              <div class="file-path-wrapper">
+                                  <input class="text-small" type="text" placeholder="Add image">
+                                    <input type="file" name="photo">
+                                </div>
+                            <button class="btn-floating btn-sm blue-gradient mt-0 file-input__submit" type="submit">
+                              <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                        </form>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="p-4">
+                            <a href="{{ url_for('route_delete_answer', answer_id=answer['id'], question_id=question['id']) }}" class="float-right pt-2"><i class="fas fa-trash text-danger"></i></a>
+                            <a href="{{ url_for('route_edit_answer', answer_id=answer['id'], question_id=question['id']) }}" class="float-right mr-2 pt-2"><i class="fas fa-edit text-info"></i></a>
+                            <h5 class="card-title">
+                                Answer # {{ loop.index }} Posted by:
+                                {%-  if answer['users_id'] -%}
+                                    <td><a href="/user/{{ answer['users_id'] }}"> {{ answer['username'] }} </a></td>
+                                {% else %}
+                                    <td> {{ answer['username'] }} </td>
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">{{ answer['message'] }}</p>
+                            <small class="text-muted d-block mt-5">
+                                Posted on: {{ answer['submission_time'] }}
+                            </small>
+
+                            <div class="mt-2">
+                                <i class="fas fa-thumbs-up mr-2 text-primary thumb-icon" onclick="answerVoteUp({{ answer['id'] }})"></i>
+                                <i class="fas fa-thumbs-down mr-2 text-danger thumb-icon" onclick="answerVoteDown({{ answer['id'] }})"></i>
+                                Votes: <span id="answer-vote-{{ answer['id'] }}">{{ answer['vote_number'] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <p class="card-title"><b>Comments:</b></p>
+                        <hr>
+                        <ul class="answer_list">
+                            {% for comment in answer_comments %}
+                                {% if comment['answer_id'] == answer['id'] %}
+                                    <li class="py-3 border-bottom mb-3">
+                                        <p>{{ comment['message'] }}</p>
+                                        <div>
+                                            <small class="text-muted mr-2">
+                                                Posted on: {{ comment['submission_time'] }}
+                                            </small>
+                                            <small class="text-muted d-block">
+                                                Posted by:
+                                                {%-  if comment['users_id'] -%}
+                                                    <td><a href="/user/{{ comment['users_id'] }}"> {{ comment['username'] }} </a></td>
+                                                {% else %}
+                                                    <td> {{ comment['username'] }} </td>
+                                                {% endif %}
+                                            </small>
+                                            {% if comment['edited_count'] > 0  %}
+                                                <small class="text-muted">
+                                                    Edited {{ comment['edited_count'] }} times
+                                                </small>
+                                            {% endif %}
+                                            <div class="mt-2">
+                                                <a href="{{ url_for('route_edit_comment', comment_id=comment['id']) }}" class="mr-2"><i class="fas fa-edit text-muted" style="margin-right:0;"></i></a>
+                                                <a href="{{ url_for('route_delete_comment', comment_id=comment['id'], question_id=question['id']) }}"><i class="fas fa-trash text-muted"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <a href="{{ url_for('route_add_comment_to_answer', question_id=question['id'], answer_id=answer['id']) }}" class="btn btn-sm btn-primary">Add comment</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
