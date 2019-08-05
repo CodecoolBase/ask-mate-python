@@ -9,6 +9,7 @@ def get_questions_fix(cursor):
     questions = cursor.fetchall()
     return questions
 
+
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC;""")
