@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% include "banner.html" %}
+{#    <div align="center">#}
+<div class="answer_display edit_page control_buttons">
+        <h1>Comment</h1>
+        <br>
+        <form action="/{{ "comments" if message else ('question' if type=='question' else 'answer') }}/{{qid}}/{{  "new-comment" if not message else "edit" }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="{{ 'question_id' if type=='question' else 'answer_id' }}" value="{{qid}}">
+            <br/>
+            <br/>
+            <textarea name="message" rows="4" cols="50">{{ message if message else "" }}</textarea>
+            <br/>
+            <input type="hidden" name="qid", value="{{ question_id }}">
+            <input type="submit" value="Upload"/>
+{#            {{ "<input type=\"hidden\"  name=\"ref\" value=\"{{ ref }} n\">" if message else ""}}#}
+        </form>
+    </div>
+</body>
+</html>

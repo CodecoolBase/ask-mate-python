@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Welcome! | Ask Mate</title>
+    </head>
+    <body>
+        {% include "banner.html" %}
+        {% include "search.html" %}
+        {% set fieldnames = ['title', 'message', 'image', 'vote_number', 'view_number', 'submission_time'] %}
+         <div class="answer padTop2p comment_buttons rowHeight">
+        {% if is_main %}
+            <h2>The most recent 5 questions</h2>
+            <form action={{"/list"}}>
+                <input type="submit" value="Click to view and sort all questions">
+            </form>
+        {% else %}
+
+            <p>
+                <label for="attribute-selector" class="padLeft2p">Sort questions by: </label>
+                <form action="/list" method="get" class="padLeft2p">
+                        <select id="attribute-selector" name="order_by">
+                            {% for header in fieldnames %}
+                                <option value="{{ header }}" {{ 'selected' if header == order_by}}>{{ header|capitalize|replace('_',' ') }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="order-direction-selector" name="order_direction">
+                            {% for order in ['asc', 'desc'] %}
+                                <option value="{{ order }}" {{ 'selected' if order == order_direction }}>{{ 'Ascending order' if order == 'asc' else 'Descending order' }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Sort">
+                </form>
+            </p>
+        {% endif %}
+
+        <table class="center pt15">
+            <colgroup>
+                <col style="width: 20%">
+                <col style="width: 50%">
+                <col style="width: 20%">
+                <col style="width: 16.5%">
+                <col style="width: 11%">
+                <col style="width: 11%">
+            </colgroup>
+            <tr>
+                {% for header in fieldnames %}
+                    <th>{{ header|capitalize|replace('_', ' ') }}</th>
+                {% endfor %}
+            </tr>
+            {% for questions in sorted_questions %}
+            <tr>
+                {% for cell in fieldnames %}
+                    {% if cell == 'submission_time' %}
+                        <td>{{ questions[cell] }}</td>
+                    {% elif cell == 'title' %}
+                        <td>
+                            <a href="{{ url_for('question_display', question_id=questions['id']) }}">{{ questions[cell] }}</a>
+                        </td>
+                    {% elif cell == 'image' %}
+                        <td>
+                            {% if questions[cell]  %}
+                            <img src="/static/{{ questions[cell] }}"  width="200" height="auto">
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td>{{ questions[cell] }}</td>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </tr>
+        </table>
+        </div>
+    </body>
+</html>
