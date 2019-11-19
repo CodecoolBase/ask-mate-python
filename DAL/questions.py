@@ -24,7 +24,17 @@ def get_questions(cursor, column, order):
 @connection.connection_handler
 def get_five_newest(cursor):
     cursor.execute("""
-                    SELECT * FROM question
+                    SELECT question.id, 
+                        submission_time, 
+                        view_number, 
+                        vote_number, 
+                        title, 
+                        message, 
+                        image, 
+                        user_id, 
+                        user_name 
+                        FROM question
+                    JOIN users ON question.user_id = users.id
                     ORDER BY submission_time DESC
                     LIMIT 5
                     """)
