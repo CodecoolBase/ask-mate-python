@@ -4,8 +4,18 @@ import connection
 @connection.connection_handler
 def get_questions(cursor, column, order):
     cursor.execute(f"""
-                    SELECT * FROM question
-                    ORDER BY {column} {order}; 
+                    SELECT question.id, 
+                        submission_time, 
+                        view_number, 
+                        vote_number, 
+                        title, 
+                        message, 
+                        image, 
+                        user_id, 
+                        user_name 
+                        FROM question
+                    JOIN users ON question.user_id = users.id
+                    ORDER BY {column} {order};
                     """)
     all_questions = cursor.fetchall()
     return all_questions
