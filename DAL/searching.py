@@ -17,6 +17,3 @@ def in_questions(cursor, phrase):
                    })
     results = cursor.fetchall()
     return results
-
-
-# @connection.connection_handler

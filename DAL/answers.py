@@ -22,7 +22,16 @@ def get_answers(cursor):
 @connection.connection_handler
 def get_answers_for_a_question(cursor, q_id):
     cursor.execute("""
-                    SELECT * FROM answer
+                    SELECT answer.id, 
+                        submission_time, 
+                        vote_number,
+                        question_id,
+                        message, 
+                        image,
+                        user_id,
+                        users.user_name 
+                        FROM answer
+                    JOIN users ON answer.user_id = users.id
                     WHERE question_id = %(q_id)s
                     ORDER BY id ASC;
                     """,
@@ -90,7 +99,16 @@ def delete(cursor, data):
 @connection.connection_handler
 def select_one(cursor, id_):
     cursor.execute("""
-                    SELECT * FROM answer
+                    SELECT answer.id, 
+                        submission_time, 
+                        vote_number,
+                        question_id,
+                        message, 
+                        image,
+                        user_id,
+                        users.user_name 
+                        FROM answer
+                    JOIN users ON answer.user_id = users.id
                     WHERE id = %(id)s;
                     """,
                    {'id': id_})
