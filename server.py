@@ -144,7 +144,7 @@ def delete_comment(comment_id):
 def comment_on_answer(answer_id):
     answer_data = data_handler.get_answer_with_its_question(answer_id)
     if request.method == 'POST':
-        data_handler.comment_on_answer(request)
+        data_handler.comment_on_answer(request, session)
         return redirect(url_for('show_answers', question_id=answer_data['question_id']))
     return render_template('comment/create_for_answer.html', answer=answer_data, username=session['username'])
 

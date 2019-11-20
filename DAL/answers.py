@@ -109,7 +109,7 @@ def select_one(cursor, id_):
                         users.user_name 
                         FROM answer
                     JOIN users ON answer.user_id = users.id
-                    WHERE id = %(id)s;
+                    WHERE answer.id = %(id)s;
                     """,
                    {'id': id_})
     one_row = cursor.fetchone()

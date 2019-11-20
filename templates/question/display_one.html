@@ -42,6 +42,10 @@
                                 {{ comment['message'] }}
                             </small>
                             <br>
+                            <small class="text-muted">
+                                Posted by: {{ comment['user_name'] }}
+                            </small>
+                            <br>
                             <small class="text-muted">- {{ comment['submission_time'] | pretty_time }} {% if comment['edited_count'] %} - edited {{ comment['edited_count'] }} time(s) {% endif %} </small>
                             <small>
                                 <a class="text-danger comment_delete" href="/comments/{{ comment['id'] }}/delete">Delete comment</a>
@@ -81,6 +85,10 @@
                                         <span>
                                             <small>
                                                 {{ comment['message'] }}
+                                            </small>
+                                            <br>
+                                            <small class="text-muted">
+                                                Posted by: {{ comment['user_name'] }}
                                             </small>
                                             <br>
                                             <small class="text-muted">- {{ comment['submission_time'] | pretty_time }} {% if comment['edited_count'] %} - edited {{ comment['edited_count'] }} time(s) - {% endif %}</small>
