@@ -92,8 +92,18 @@ def delete(cursor, data):
 @connection.connection_handler
 def select_one(cursor, id_):
     cursor.execute("""
-                    SELECT * FROM question
-                    WHERE id = %(id)s;
+                    SELECT question.id, 
+                        submission_time, 
+                        view_number, 
+                        vote_number, 
+                        title, 
+                        message, 
+                        image, 
+                        user_id, 
+                        user_name 
+                        FROM question
+                    JOIN users ON question.user_id = users.id
+                    WHERE question.id = %(id)s;
                     """,
                    {'id': id_})
     one_row = cursor.fetchone()

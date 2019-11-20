@@ -7,9 +7,8 @@
 {% block content %}
     <div class="jumbotron">
         <h1>{{ question['title'] }}</h1>
-
-        <small class="form-text text-muted mb-3">Posted: {{ question['submission_time'] | pretty_time }}</small>
-
+        <small class="form-text text-muted mb-3">Posted at: {{ question['submission_time'] | pretty_time }}</small>
+        <small class="form-text text-muted mb-3">Posted by: {{ question['user_name'] }}</small>
         <p class="lead">{{ question['message'] | safe }}</p>
 
         {% if question['image'] %}

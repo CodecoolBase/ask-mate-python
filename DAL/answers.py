@@ -4,7 +4,16 @@ import connection
 @connection.connection_handler
 def get_answers(cursor):
     cursor.execute("""
-                    SELECT * FROM answer;
+                    SELECT answer.id, 
+                        submission_time, 
+                        vote_number,
+                        question_id,
+                        message, 
+                        image,
+                        user_id,
+                        users.user_name 
+                        FROM answer
+                    JOIN users ON answer.user_id = users.id;
                     """)
     all_answers = cursor.fetchall()
     return all_answers
