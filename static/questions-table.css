@@ -1,0 +1,50 @@
+.table-container{
+    border-collapse: collapse;
+    text-align: center;
+    color: #f7f7f7f7;
+    overflow: hidden;
+    width: 100%;
+}
+
+.table-container thead th{
+    background-color: #0B2329;
+    padding: 10px 30px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 20px;
+}
+
+.table-container tbody tr:nth-of-type(even){
+    background-color: #1C3B4A;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.table-container tbody tr:nth-of-type(odd){
+    background-color: #285369;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.table-container tbody tr td pre{
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.table-container tbody tr:hover{
+    background-color: #327594;
+}
+
+.table-container tbody tr td{
+    padding: 21px 20px;
+}
+
+.table-container a{
+    font-size: large;
+    color: #f7f7f7f7;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.table-container a:hover{
+    color: black;
+}
