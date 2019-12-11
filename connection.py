@@ -40,12 +40,16 @@ def get_data():
     return data
 
   
-def write_data(new_data, fieldnames):
+def write_data(new_data):
     with open('./sample_data/question.csv', 'w') as file:
+        fieldnames = DATA_HEADER
         csv_write = csv.DictWriter(file, fieldnames=fieldnames)
         csv_write.writeheader()
         for line in new_data:
-            csv_write.writerow({'id': line['id'], 'submission_time': line['submission_time'], 'view_number': line['view_number'],
-                                 'vote_number': line['vote_number'], 'title': line['title'], 'message': line['message'], 'image': line['image']})
-
-
+            csv_write.writerow({'id': line['id'],
+                                'submission_time': line['submission_time'],
+                                'view_number': line['view_number'],
+                                'vote_number': line['vote_number'],
+                                'title': line['title'],
+                                'message': line['message'],
+                                'image': line['image']})
