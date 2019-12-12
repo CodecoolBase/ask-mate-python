@@ -1,0 +1,29 @@
+
+
+<div class="block" id="flame" style="display:none;">
+        <form class="content"
+              id="newcomment_block"
+              method="GET"
+              enctype="multipart/form-data">
+            <input id="comm_qid" type="hidden" name="" value="">
+            <label for="commtext">Add new comment</label>
+           <textarea id="commtext" name="message" rows="10" cols="25"></textarea>
+            <button type="submit">Post comment</button>
+        </form>
+
+</div>
+
+<script defer>
+    let comblock = document.getElementById("newcomment_block");
+    comblock.style.borderLeftColor = "darkgoldenrod";
+    comblock.style.borderWidth = "20px";
+    comblock.style.borderBottomLeftRadius = "10px";
+    comblock.style.borderTopLeftRadius = "10px";
+    comblock.style.padding = "20px";
+    document.getElementById("newcomment_block").focus();
+    document.activeElement.parentNode.scrollIntoView();
+    document.getElementById("flame").focus();
+
+
+
+</script>
